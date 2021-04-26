@@ -20,14 +20,14 @@ The app will consist of a screen showing all of the nodes. As nodes are added to
 The Wiki Road to Philosophy will be accomplished with the following technologies:
 * `HTML/CSS` for rendering of the nodes.
 * `Javascript` to handle user interaction via event listeners.
-* `MediaWiki API` to access data on the links each Wikipedia article has.
-* `Node Fetch` module to handle the AJAX requests to and responses from the `MediaWiki API`.
+* `MediaWiki Action API` to access data on the links each Wikipedia article has.
+* `Node Fetch` module to handle the AJAX requests to and responses from the `MediaWiki Action API`.
 
 ## Implementation Timeline
 * Day 1: 
     * Create high-level proposal to map out goals and path to completion.
-    * Get familiarized with `MediaWiki API` endpoints and their outputs.
-    * Design `Javascript` functions to fetch the necessary data from the `MediaWiki API`.
+    * Get familiarized with `MediaWiki Action API` endpoints and their outputs.
+    * Design `Javascript` functions to fetch the necessary data from the `MediaWiki Action API`.
 * Day 2:
     * Design the `HTML/CSS` elements for the nodes, connections, and details dropdown
     * Implement logic via `Javascript` for creating a single chain of nodes to Philosophy
@@ -42,4 +42,4 @@ The Wiki Road to Philosophy will be accomplished with the following technologies
 
 * Optimization: Find the shortest path from one article to another.
 * Allow user to input target destination instead of being constrained only to the Philosophy page.
-* Add loading modal with animation to run while app is fetching data from MediaWiki API and rendering the HTML/CSS elements.
+* Add loading modal with animation to run while app is fetching data from `MediaWiki Action API` and rendering the HTML/CSS elements.
