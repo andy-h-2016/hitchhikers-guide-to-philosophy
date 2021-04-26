@@ -13,7 +13,7 @@ In addition, there will be a splash page introducing the app and how to use it.
 
 ## Wireframe
 The app will consist of a screen showing all of the nodes. As nodes are added to the screen, the zoom level will auto-scale to fit all of the nodes on the screen. Zoom controls will be available. Primary control scheme will be the mouse clicking and dragging to select nodes and move the view window around.
-<img src=".assets/images/wireframe.png"/>
+<img src="./assets/images/wireframe.png"/>
 
 
 ## Architecture & Technologies
