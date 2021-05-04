@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 
 async function fetchAllLinks(title, startingPoint) {
-  console.log('ARGS', title, startingPoint)
   let linksMap = {};
   
   let url = "https://en.wikipedia.org/w/api.php?origin=*"; 
@@ -21,7 +20,6 @@ async function fetchAllLinks(title, startingPoint) {
   }
   
   Object.keys(params).forEach(key => url += "&" + key + "=" + params[key]);
-  // console.log('url', url)
   const response = await fetch(url);
   const jsonResponse = await response.json();
   const pages = jsonResponse.query.pages;
@@ -35,11 +33,9 @@ async function fetchAllLinks(title, startingPoint) {
       } else {
         const titleLength = title.length;
         linksMap[titleLength] = title;
-        linksMap[title] = title;
       }
     }
   }
-  console.log('INTERMEDIATE', linksMap)
 
   let nextStartingPoint;
 
@@ -48,9 +44,59 @@ async function fetchAllLinks(title, startingPoint) {
   const nextResults = await fetchAllLinks(title, nextStartingPoint);
   return {linksMap, ...nextResults}
   // return linksMap
+}
 
+async function fetchPhilosophyLink(title) {
+  //if the link to the philosophy page is on the given page, return it. Otherwise
+  let url = "https://en.wikipedia.org/w/api.php?origin=*"; 
+  let params = {
+    action: "query",
+    format: "json",
+    titles: title,
+    pltitles: "Philosophy",
+    prop: "links",
+    plnamespace: 0,
+  };
+
+  Object.keys(params).forEach(key => url += "&" + key + "=" + params[key]);
+  const response = await fetch(url);
+  const jsonResponse = await response.json();
+  const pages = jsonResponse.query.pages;
+  for (const pageId in pages) {
+    if (pages[pageId].links === undefined) {return null}
+
+    for (const link of pages[pageId].links) {
+      return link.title
+    }
   }
+}
 
- fetchAllLinks("Albert Einstein", 0).then(allLinks => {
-   console.log('allLinksS',allLinks)
-  })
+let links = await fetchAllLinks("Albert Einstein", 0);
+let philosophyLink = await fetchPhilosophyLink("Albert Einstein", 0);
+// console.log('links', links)
+// console.log('Philly', philosophyLink)
+
+async function fetchPhilosophyLink(title) {
+  //if the link to the philosophy page is on the given page, return it. Otherwise
+  let url = "https://en.wikipedia.org/w/api.php?origin=*"; 
+  let params = {
+    action: "query",
+    format: "json",
+    titles: title,
+    pltitles: "Philosophy",
+    prop: "links",
+    plnamespace: 0,
+  };
+
+  Object.keys(params).forEach(key => url += "&" + key + "=" + params[key]);
+  const response = await fetch(url);
+  const jsonResponse = await response.json();
+  const pages = jsonResponse.query.pages;
+  for (const pageId in pages) {
+    if (pages[pageId].links === undefined) {return null}
+
+    for (const link of pages[pageId].links) {
+      return link.title
+    }
+  }
+}
