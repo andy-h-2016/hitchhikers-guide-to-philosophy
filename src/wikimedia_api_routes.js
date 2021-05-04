@@ -1,10 +1,8 @@
 const fetch = require('node-fetch');
-// const {DOMParser} = require('linkedom');
 import regenerationRuntime from 'regenerator-runtime';
 
 
 async function fetchFirstLink(page, count = 1) {
-  // console.log('title', title)
   const url = "https://en.wikipedia.org/w/api.php?" +
     new URLSearchParams({
         origin: "*",
@@ -21,50 +19,64 @@ async function fetchFirstLink(page, count = 1) {
   const html = json.parse.text["*"];
   const parser = new DOMParser();
   const DOM = parser.parseFromString(html, "text/html");
-  // console.log(DOM)
-  const pTags = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
-  // console.log(pTags);
-  let relevantP;
-  for (let node of pTags) {
+  let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
+  if (htmlElements.length < 2 && !htmlElements[0].innerHTML.match(/<a/)) {
+    //on Disambiguation pages, there is only 1 <p> and it typically does not have any links.
+    //Instead, they have <li> with links in them.
+    htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
+  }
+  console.log('html', htmlElements);
+  let relevantNode;
+  for (let node of htmlElements) {
+
     let numChildNodes = 0;
     node.childNodes.forEach(child => {
-      // console.log('childNode', child)
       if (child.nodeValue !== "\n") {
         numChildNodes += 1;
       }
-    })
+    });
 
     if (numChildNodes > 1 && node.innerHTML.match(/<a/)) {
-      // console.log('true node', node)
-      relevantP = node;
+      relevantNode = node;
       break
     }
   }
-  const pHTML = relevantP.innerHTML;
-  // console.log('html', pHTML);
-  // const mwParserOutput.querySelector()
-  // const pAfterTableRegex = /(?<=<\/table>\n(?:.+\n)?)<p>[\w\W]+<\/p>/;
-  // const pNoTableRegex = /<p>[\w\W]+<\/p>/
-  // const pMatches = html.match(pAfterTableRegex) || html.match(pNoTableRegex);
-  // const pCapture = pMatches[0];
+  console.log('relevantNode', relevantNode)
+  const innerHTML = relevantNode.innerHTML;
+  console.log('html', innerHTML)
 
   // const linkRegex = /(?<!(?:\(.+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
   // const linkRegex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
-  const paranthesesRegex = /(?<=.+\))[\w\s\-\.]+<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
-  const parantheses2Regex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  const paranthesesRegex = /(?<=.+\))[\w\s\-\.]+<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  // const parantheses2Regex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  const parantheses2Regex = /(?<!(?:\([\w\s]*)|from\s|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
-  const matches = pHTML.match(paranthesesRegex) || pHTML.match(parantheses2Regex) || pHTML.match(noParanthesesRegex);
+
+  // const matches = [
+  //   innerHTML.match(paranthesesRegex),
+  //   innerHTML.match(parantheses2Regex),
+  // ];
+
+  // let mostMatches;
+  // let longestLength = 0;
+  // matches.forEach(match => {
+  //   if (match && match.length > longestLength) {
+  //     longestLength = match.length;
+  //     mostMatches = match;
+  //   }
+  // });
+
+  const mostMatches = innerHTML.match(parantheses2Regex) || innerHTML.match(noParanthesesRegex)
+
+  
   // if (count > 1) {
-    console.log('match', matches)
+    console.log('match', mostMatches)
   // }
   const n = count - 1; //zero index;
-  const nthMatch = matches[n];
+  const nthMatch = mostMatches[n];
   console.log('nthMatch', nthMatch)
   const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/]+)/)[1];
-  // const aTag = DOM.querySelector()
 
-  // const title = pMatches.match(linkRegex).slice(0,10);
-  // console.log('title', title)
   return {
     title,
     url: `https://en.wikipedia.org/wiki/${title}`
