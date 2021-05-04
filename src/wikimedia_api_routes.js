@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 import regenerationRuntime from 'regenerator-runtime';
 
 
-async function fetchFirstLink(page) {
+async function fetchFirstLink(page, count = 1) {
   // console.log('title', title)
   const url = "https://en.wikipedia.org/w/api.php?" +
     new URLSearchParams({
@@ -23,22 +23,25 @@ async function fetchFirstLink(page) {
   const DOM = parser.parseFromString(html, "text/html");
   // console.log(DOM)
   const pTags = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
-  console.log(pTags);
+  // console.log(pTags);
   let relevantP;
   for (let node of pTags) {
-    // console.log(node.childNodes)
-    // let numChildNodes;
-    // node.childNodes.forEach(child => {
-    //   if (child.)
-    // })
-    if (node.innerHTML.match(/<a/)) {
-      console.log('true node', node)
+    let numChildNodes = 0;
+    node.childNodes.forEach(child => {
+      // console.log('childNode', child)
+      if (child.nodeValue !== "\n") {
+        numChildNodes += 1;
+      }
+    })
+
+    if (numChildNodes > 1 && node.innerHTML.match(/<a/)) {
+      // console.log('true node', node)
       relevantP = node;
       break
     }
   }
   const pHTML = relevantP.innerHTML;
-  console.log('html', pHTML);
+  // console.log('html', pHTML);
   // const mwParserOutput.querySelector()
   // const pAfterTableRegex = /(?<=<\/table>\n(?:.+\n)?)<p>[\w\W]+<\/p>/;
   // const pNoTableRegex = /<p>[\w\W]+<\/p>/
@@ -47,11 +50,17 @@ async function fetchFirstLink(page) {
 
   // const linkRegex = /(?<!(?:\(.+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
   // const linkRegex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
-  const paranthesesRegex = /.+\)[\w\s\-\.]+<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
-  const parantheses2Regex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
-  const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
-  const match = pHTML.match(paranthesesRegex) || pHTML.match(parantheses2Regex) || pHTML.match(noParanthesesRegex);
-  const title = match[1];
+  const paranthesesRegex = /(?<=.+\))[\w\s\-\.]+<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  const parantheses2Regex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  const matches = pHTML.match(paranthesesRegex) || pHTML.match(parantheses2Regex) || pHTML.match(noParanthesesRegex);
+  // if (count > 1) {
+    console.log('match', matches)
+  // }
+  const n = count - 1; //zero index;
+  const nthMatch = matches[n];
+  console.log('nthMatch', nthMatch)
+  const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/]+)/)[1];
   // const aTag = DOM.querySelector()
 
   // const title = pMatches.match(linkRegex).slice(0,10);

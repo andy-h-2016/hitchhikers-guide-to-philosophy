@@ -19,11 +19,16 @@ const handleSubmit = async (e) => {
     console.log('result', nextPage)
 
   while (nextPage.title.toLowerCase() !== 'philosophy') {
-    nextPage = await fetchFirstLink(nextPage.title);
-    if (linksToPhilosophy.includes(nextPage.title)) {
-      console.log('STOP', nextPage);
-      return
+    let potentialPage = await fetchFirstLink(nextPage.title);
+
+    let count = 1;
+    while (linksToPhilosophy.includes(potentialPage.title)) {
+      count += 1;
+      console.log('DUPLICATE', potentialPage);
+      potentialPage = await fetchFirstLink(potentialPage.title, count)
+      // return
     }
+    nextPage = potentialPage;
     linksToPhilosophy.push(nextPage.title);
     console.log('result', nextPage)
   }
