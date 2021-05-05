@@ -1,5 +1,6 @@
 import * as ArticleNode from './article_node';
 import fetchFirstLink from './wikimedia_api_routes';
+import createDiagram from '../d3_demos/force_diagram';
 
 const nodes = {
   Philosophy: ArticleNode.createNode({
@@ -61,7 +62,18 @@ const handleSubmit = async (e) => {
   
 }
 
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
+  const chartDiv = document.createElement("div");
+  chartDiv.appendChild(createDiagram()) 
+  const body = document.getElementById('body');
+  body.appendChild(chartDiv);
+  console.log('body', body);
+  console.log('chart', chartDiv)
+
   const form = document.querySelector(".article-form");
   form.addEventListener("submit", handleSubmit); 
 });
+
