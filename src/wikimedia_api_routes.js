@@ -20,27 +20,33 @@ async function fetchFirstLink(page, count = 1) {
   const parser = new DOMParser();
   const DOM = parser.parseFromString(html, "text/html");
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
-  if (htmlElements.length < 2 && !htmlElements[0].innerHTML.match(/<a/)) {
-    //on Disambiguation pages, there is only 1 <p> and it typically does not have any links.
-    //Instead, they have <li> with links in them.
-    htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
-  }
+  // if (htmlElements.length < 2 && !htmlElements[0].innerHTML.match(/<a/)) {
+  //   //on Disambiguation pages, there is only 1 <p> and it typically does not have any links.
+  //   //Instead, they have <li> with links in them.
+  //   htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
+  // }
   console.log('html', htmlElements);
+  
   let relevantNode;
-  for (let node of htmlElements) {
+  while (relevantNode === undefined) {
+    for (let node of htmlElements) {
+      let numChildNodes = 0;
+      node.childNodes.forEach(child => {
+        if (child.nodeValue !== "\n") {
+          numChildNodes += 1;
+        }
+      });
 
-    let numChildNodes = 0;
-    node.childNodes.forEach(child => {
-      if (child.nodeValue !== "\n") {
-        numChildNodes += 1;
+      if (numChildNodes > 1 && node.innerHTML.match(/<a/)) {
+        relevantNode = node;
+        break
       }
-    });
-
-    if (numChildNodes > 1 && node.innerHTML.match(/<a/)) {
-      relevantNode = node;
-      break
+    }
+    if (relevantNode === undefined) {
+      htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
     }
   }
+  
   console.log('relevantNode', relevantNode)
   const innerHTML = relevantNode.innerHTML;
   console.log('html', innerHTML)
@@ -49,7 +55,7 @@ async function fetchFirstLink(page, count = 1) {
   // const linkRegex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
   const paranthesesRegex = /(?<=.+\))[\w\s\-\.]+<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   // const parantheses2Regex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
-  const parantheses2Regex = /(?<!(?:\([\w\s]*)|from\s|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  const parantheses2Regex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
 
   // const matches = [

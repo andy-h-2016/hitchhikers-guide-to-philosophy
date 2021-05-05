@@ -1,10 +1,9 @@
 const d3 = require('d3');
 const d3Force = require('d3-force');
-// const observableLib = require('@observablehq/stdlib')
 
 export default function createDiagram() {
-  const height = 600;
-  const width = 1000;
+  const height = window.innerHeight;
+  const width = window.innerWidth;
   const drag = simulation => {
   
     function dragstarted(event) {
