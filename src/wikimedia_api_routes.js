@@ -21,7 +21,7 @@ async function fetchFirstLink(page, count = 1) {
   const DOM = parser.parseFromString(html, "text/html");
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
  
-  console.log('html', htmlElements);
+  // console.log('html', htmlElements);
   
   let relevantNode;
   while (relevantNode === undefined) {
@@ -43,9 +43,9 @@ async function fetchFirstLink(page, count = 1) {
     }
   }
   
-  console.log('relevantNode', relevantNode)
+  // console.log('relevantNode', relevantNode)
   const innerHTML = relevantNode.innerHTML;
-  console.log('html', innerHTML)
+  // console.log('html', innerHTML)
 
   const parantheses2Regex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
@@ -54,18 +54,19 @@ async function fetchFirstLink(page, count = 1) {
 
   
   // if (count > 1) {
-    console.log('match', mostMatches)
+    // console.log('match', mostMatches)
   // }
   const n = count - 1; //zero index;
   const nthMatch = mostMatches[n];
-  console.log('nthMatch', nthMatch)
+  // console.log('nthMatch', nthMatch)
   const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/]+)/)[1];
 
   return {
     id: title.toLowerCase(),
     label: title.replace('_', ' '),
     url: `https://en.wikipedia.org/wiki/${title}`,
-    group: 1
+    group: 1,
+    level: 1
   }
 
 }
