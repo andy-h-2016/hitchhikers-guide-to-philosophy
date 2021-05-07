@@ -20,11 +20,7 @@ async function fetchFirstLink(page, count = 1) {
   const parser = new DOMParser();
   const DOM = parser.parseFromString(html, "text/html");
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
-  // if (htmlElements.length < 2 && !htmlElements[0].innerHTML.match(/<a/)) {
-  //   //on Disambiguation pages, there is only 1 <p> and it typically does not have any links.
-  //   //Instead, they have <li> with links in them.
-  //   htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
-  // }
+ 
   console.log('html', htmlElements);
   
   let relevantNode;
@@ -51,26 +47,8 @@ async function fetchFirstLink(page, count = 1) {
   const innerHTML = relevantNode.innerHTML;
   console.log('html', innerHTML)
 
-  // const linkRegex = /(?<!(?:\(.+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
-  // const linkRegex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)([\w_\(\):\-\.\/"]+)"/;
-  const paranthesesRegex = /(?<=.+\))[\w\s\-\.]+<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
-  // const parantheses2Regex = /(?<!(?:\([\w\s]+)|<small>)<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const parantheses2Regex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
-
-  // const matches = [
-  //   innerHTML.match(paranthesesRegex),
-  //   innerHTML.match(parantheses2Regex),
-  // ];
-
-  // let mostMatches;
-  // let longestLength = 0;
-  // matches.forEach(match => {
-  //   if (match && match.length > longestLength) {
-  //     longestLength = match.length;
-  //     mostMatches = match;
-  //   }
-  // });
 
   const mostMatches = innerHTML.match(parantheses2Regex) || innerHTML.match(noParanthesesRegex)
 
@@ -84,20 +62,12 @@ async function fetchFirstLink(page, count = 1) {
   const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/]+)/)[1];
 
   return {
-    title,
-    url: `https://en.wikipedia.org/wiki/${title}`
+    id: title.toLowerCase(),
+    label: title.replace('_', ' '),
+    url: `https://en.wikipedia.org/wiki/${title}`,
+    group: 1
   }
 
 }
 
-// const link = async (page) => await fetchFirstLink(page)
-// link("epistemology").then(result => console.log(result));
-// let links = async () => await fetchAllLinks("Albert Einstein", 'INITIAL');
-// };
-// fetchAllLinks("Avengers", 'INITIAL').then(links => console.log(links))
-// let philosophyLink = await fetchPhilosophyLink("Albert Einstein", 0);
-// console.log('links', links())
-// console.log('Philly', philosophyLink)
-
-// module.exports.fetchFirstLink = fetchFirstLink;
 export default fetchFirstLink;

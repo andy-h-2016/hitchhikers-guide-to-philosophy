@@ -1,14 +1,22 @@
 import * as ArticleNode from './article_node';
 import fetchFirstLink from './wikimedia_api_routes';
-import createDiagram from '../d3_demos/force_diagram';
+import {createDiagram, updateDiagram} from '../d3_demos/force_diagram';
 
+//input into d3 renderer as Object.values(nodes)
 const nodes = {
-  Philosophy: ArticleNode.createNode({
-    title: "Philosophy",
-    parent: []
-  })};
+  philosophy: {
+    id: "philosophy", 
+    label: "Philosophy", 
+    url: "https://en.wikipedia.org/wiki/Philosophy",
+    group: 0, 
+    level: 1
+  }
+}
+const links = [];
 
 const handleSubmit = async (e) => {
+  // grab a page
+
   e.preventDefault();
   e.stopPropagation();
 
@@ -16,49 +24,27 @@ const handleSubmit = async (e) => {
   // console.log('e', e)
   
   let nextPage = await fetchFirstLink(newTitle);
-  let linksToPhilosophy = [nextPage.title];
-    console.log('result', nextPage)
+  nodes.push(nextPage)
+  // links.push()
 
-  while (nextPage.title.toLowerCase() !== 'philosophy') {
-    let potentialPage = await fetchFirstLink(nextPage.title);
+  // keep grabbing the next page until the philosophy page is reached
+  while (nextPage.id !== 'philosophy') {
+    let potentialPage = await fetchFirstLink(nextPage.id);
 
+    // check if page has already been visited
     let count = 1;
-    while (linksToPhilosophy.includes(potentialPage.title)) {
+    while (!!nodes[potentialPage.id]) {
+      //count 
       count += 1;
       console.log('DUPLICATE', potentialPage);
-      potentialPage = await fetchFirstLink(potentialPage.title, count)
+      potentialPage = await fetchFirstLink(potentialPage.id, count)
       // return
     }
     nextPage = potentialPage;
-    linksToPhilosophy.push(nextPage.title);
+    nodes[nextPage.id] = nextPage;
     console.log('result', nextPage)
   }
-  
-  // nodes[newTitle] = ArticleNode.createNode({
-  //   title: newTitle, 
-  //   child: linksObj.Philosophy || linksToPhilosophy[1]
-  // })
 
-  // // loop from 2nd link to second to last link in linksToPhilosophy array
-  // // need special setup for the last link and for Philosophy
-  // length = linksToPhilosophy.length
-  // for (let i = 1; i < length - 1; i++) {
-  //   let link = linksToPhilosophy[i];
-  //   nodes[link] = ArticleNode.createNode({
-  //     parent: linksToPhilosophy[i - 1],
-  //     title: link,
-  //     child: linksToPhilosophy[i + 1]
-  //   })
-  // }
-
-  // const lastLink = linksToPhilosophy[length - 1];
-  // nodes[lastLink] = ArticleNode.createNode({
-  //   parent: linksToPhilosophy[length - 2],
-  //   title: lastLink,
-  //   child: "Philosophy"
-  // })
-
-  // nodes.Philosophy.parent.push(lastLink);
   
 }
 
@@ -66,12 +52,8 @@ const handleSubmit = async (e) => {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  const chartDiv = document.createElement("div");
-  chartDiv.appendChild(createDiagram()) 
-  const body = document.getElementById('body');
-  body.appendChild(chartDiv);
-  console.log('body', body);
-  console.log('chart', chartDiv)
+  const graphContainer = document.getElementById('graph-container');
+  graphContainer.appendChild(updateDiagram(nodes));
 
   const form = document.querySelector(".article-form");
   form.addEventListener("submit", handleSubmit); 
