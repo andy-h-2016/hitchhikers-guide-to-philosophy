@@ -40,9 +40,7 @@ export function createDiagram(nodes, links = []) {
     // .force("y", d3.forceY());
 
   const svg = d3.select("svg")
-  .attr("viewBox", [0, 0, width, height]);
-    // .attr("viewBox", [-width / 2, -height / 2, width, height]);
-
+    .attr("viewBox", [0, 0, width, height]);
 
   const link = d3.select(".links-group")
     .selectAll("line")
@@ -57,16 +55,11 @@ export function createDiagram(nodes, links = []) {
       enter => enter.append("g"),
       update => update.attr("transform", d => `translate(${d.x}, ${d.y})`)
     )
-    // .enter().append("g");
-  // nodeGroup
-  //   .merge(nodeGroup.select("g"))
-  //   .attr("transform", d => `translate(${d.x}, ${d.y})`);
   
   const node = nodeGroup.append("circle")
     .attr("r", 8)
     .attr("fill", color)
     .call(drag(simulation));
-
 
   const label = nodeGroup.append("text")
     .text(d => d.label)
@@ -75,21 +68,7 @@ export function createDiagram(nodes, links = []) {
     .join(
       enter => enter,
       update => update.attr('stroke', 'black')
-      )
-    // .merge(nodeGroup.select('text'))
-    //   .style('color', 'black')
-
-
-  // const node = d3.select(".nodes-group")
-  //   .selectAll("circle")
-  //   .data(nodes)
-  //   .join("circle")
-  //   .attr("r", 5)
-  //   .attr("fill", color)
-  //   .call(drag(simulation));
-
-  // node.append("title")
-  //   .text(d => d.id);
+    )
 
   simulation.on("tick", () => {
     link
@@ -98,15 +77,9 @@ export function createDiagram(nodes, links = []) {
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
 
-
     nodeGroup
       .attr("transform", d => `translate(${d.x}, ${d.y})`)
-    // node
-    //   .attr("cx", d => d.x)
-    //   .attr("cy", d => d.y);
   });
 
-  // observableLib.invalidation.then(() => simulation.stop());
   return svg.node();
-
 }

@@ -1,7 +1,5 @@
-import * as ArticleNode from './article_node';
 import fetchFirstLink from './wikimedia_api_routes';
-import {createDiagram} from '../d3_demos/force_diagram';
-import updateDigram from '../d3_demos/update_diagram';
+import {createDiagram} from './diagram/force_diagram';
 
 //input into d3 renderer as Object.values(nodes)
 let group = 0;
