@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 import regenerationRuntime from 'regenerator-runtime';
 
 
-async function fetchFirstLink(page, count = 1) {
+async function fetchFirstLink(page, count = 1, group) {
   const url = "https://en.wikipedia.org/w/api.php?" +
     new URLSearchParams({
         origin: "*",
@@ -47,10 +47,10 @@ async function fetchFirstLink(page, count = 1) {
   const innerHTML = relevantNode.innerHTML;
   // console.log('html', innerHTML)
 
-  const parantheses2Regex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
 
-  const mostMatches = innerHTML.match(parantheses2Regex) || innerHTML.match(noParanthesesRegex)
+  const mostMatches = innerHTML.match(paranthesesRegex) || innerHTML.match(noParanthesesRegex)
 
   
   // if (count > 1) {
@@ -63,9 +63,9 @@ async function fetchFirstLink(page, count = 1) {
 
   return {
     id: title.toLowerCase(),
-    label: title.replace('_', ' '),
+    label: title.replaceAll('_', ' '),
     url: `https://en.wikipedia.org/wiki/${title}`,
-    group: 1,
+    group: group,
     level: 1
   }
 
