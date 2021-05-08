@@ -35,10 +35,13 @@ export function createDiagram(nodes, links = []) {
   const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d => d.id))
     .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2));
+    .force("center", d3.forceCenter(width / 2, height / 2).strength(0.5));
+    // .force("x", d3.forceX())
+    // .force("y", d3.forceY());
 
   const svg = d3.select("svg")
-    .attr("viewBox", [0, 0, width, height]);
+  .attr("viewBox", [0, 0, width, height]);
+    // .attr("viewBox", [-width / 2, -height / 2, width, height]);
 
 
   const link = d3.select(".links-group")
@@ -50,23 +53,31 @@ export function createDiagram(nodes, links = []) {
   const nodeGroup = d3.select(".nodes-group")
     .selectAll("g")
     .data(nodes)
-    .enter().append("g");
-  nodeGroup
-    .merge(nodeGroup.select("g"))
-    .attr("transform", d => `translate(${d.x}, ${d.y})`);
+    .join(
+      enter => enter.append("g"),
+      update => update.attr("transform", d => `translate(${d.x}, ${d.y})`)
+    )
+    // .enter().append("g");
+  // nodeGroup
+  //   .merge(nodeGroup.select("g"))
+  //   .attr("transform", d => `translate(${d.x}, ${d.y})`);
   
   const node = nodeGroup.append("circle")
-    .attr("r", 5)
+    .attr("r", 8)
     .attr("fill", color)
     .call(drag(simulation));
 
 
   const label = nodeGroup.append("text")
     .text(d => d.label)
-    .attr('x', 6)
-    .attr('y', 3)
-    .merge(nodeGroup.select('text'))
-      .style('color', 'black')
+    .attr('x', 0)
+    .attr('y', -12)
+    .join(
+      enter => enter,
+      update => update.attr('stroke', 'black')
+      )
+    // .merge(nodeGroup.select('text'))
+    //   .style('color', 'black')
 
 
   // const node = d3.select(".nodes-group")

@@ -58,7 +58,12 @@ const handleSubmit = async (e) => {
     prevPage = nextPage;
     nextPage = potentialPage; // the unvisited potentialPage becomews the next Page
 
-    currentAdditions[nextPage.id] = nextPage;
+    //if node already exists, don't add on
+    if (!nodes[nextPage.id]) {
+      currentAdditions[nextPage.id] = nextPage;
+    }
+
+    //no matter what, need to add link 
     currentLinks.push({
       source: prevPage.id,
       target: nextPage.id,
