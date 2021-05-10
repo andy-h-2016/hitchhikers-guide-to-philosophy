@@ -1,4 +1,4 @@
-import fetchFirstLink from './wikimedia_api_routes';
+import {fetchFirstLink, fetchRandomArticleTitle} from './wikimedia_api_routes';
 import {createDiagram} from './diagram/force_diagram';
 
 //input into d3 renderer as Object.values(nodes)
@@ -6,7 +6,6 @@ let group = 0;
 const nodes = {
   philosophy: {
     id: "philosophy", 
-    label: "Philosophy", 
     url: "https://en.wikipedia.org/wiki/Philosophy",
     group: group, 
     level: 1
@@ -15,21 +14,40 @@ const nodes = {
 
 const links = [];
 
-const handleSubmit = async (e) => {
+const submitRandomArticle = async (e) => {
+  const randomArticleTitle = await fetchRandomArticleTitle();
+  handleSubmit(e, randomArticleTitle);
+} 
+
+const handleSubmit = async (e, input) => {
   // grab a page
 
   e.preventDefault();
   e.stopPropagation();
 
-  const newTitle = e.target[0].value;
+  input ||= e.target[0].value;
   group += 1;
   //replace with API route to grab page title and url info
-  let nextPage = {
-    id: newTitle,
-    label: newTitle,
-    group: group,
-    level: 1
-  };
+  
+  const wikiRegex = /https\:\/\/en\.wikipedia\.org\/wiki\/(.+)/
+  const titleMatch = input.match(wikiRegex);
+
+  let nextPage;
+  if (titleMatch !== null) {
+    nextPage = {
+      id: titleMatch[1],
+      url:  input,
+      group: group,
+      level: 1
+    };
+  } else {
+    nextPage = {
+      id: input,
+      url:  `https://en.wikipedia.org/wiki/${input.replaceAll(' ', '_')}`,
+      group: group,
+      level: 1
+    };
+  }
 
   let prevPage;
 
@@ -37,9 +55,6 @@ const handleSubmit = async (e) => {
   const currentAdditions = {};
   currentAdditions[nextPage.id] = nextPage;
   const currentLinks = [];
-  // currentAdditions[prevPage.id] = prevPage;
-  // currentAdditions[nextPage.id] = nextPage;
-  console.log('before while', 'page', nextPage, 'node', nodes) 
   while (!nodes[nextPage.id]) {
     let count = 1;
     let potentialPage = await fetchFirstLink(nextPage.id, count, group);
@@ -67,9 +82,6 @@ const handleSubmit = async (e) => {
       target: nextPage.id,
       value: 1
     })
-
-    console.log('conditional', nodes[nextPage.id], !nodes[nextPage.id])
-    console.log('result', nextPage.id)
   }
 
   for (let pageId in currentAdditions) {
@@ -78,10 +90,6 @@ const handleSubmit = async (e) => {
 
   links.push(...currentLinks);
   
-  console.log('prevPageId', prevPage.id)
-  console.log('nextPageId', nextPage.id)
-  console.log('nodes', nodes);
-  console.log('links', links)
   const graphContainer = document.getElementById('graph-container');
 
   createDiagram(Object.values(nodes), links);
@@ -89,12 +97,13 @@ const handleSubmit = async (e) => {
 }
 
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
   // updateDiagram(Object.values(nodes));
   createDiagram(Object.values(nodes))
   const form = document.querySelector(".article-form");
-  form.addEventListener("submit", handleSubmit); 
+  form.addEventListener("submit", handleSubmit);
+  
+  const randomButton = document.querySelector('.random-submit');
+  randomButton.addEventListener("click", submitRandomArticle)
 });
 

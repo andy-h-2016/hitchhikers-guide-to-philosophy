@@ -35,12 +35,23 @@ export function createDiagram(nodes, links = []) {
   const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d => d.id))
     .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2).strength(0.5));
+    .force("center", d3.forceCenter(width / 2, height / 2).strength(0.8));
     // .force("x", d3.forceX())
     // .force("y", d3.forceY());
 
   const svg = d3.select("svg")
-    .attr("viewBox", [0, 0, width, height]);
+    .attr("viewBox", [0, 0, width*0.9, height*0.8]);
+
+  const viewBox = d3.select(".graph-viewbox")
+
+  svg.call(d3.zoom()
+      .extent([[0, 0], [width, height]])
+      .scaleExtent([1, 8])
+      .on("zoom", zoomed));
+
+  function zoomed({transform}) {
+    viewBox.attr("transform", transform);
+  }
 
   const link = d3.select(".links-group")
     .selectAll("line")
@@ -57,18 +68,16 @@ export function createDiagram(nodes, links = []) {
     )
   
   const node = nodeGroup.append("circle")
-    .attr("r", 8)
+    .attr("r", 4)
     .attr("fill", color)
     .call(drag(simulation));
 
-  const label = nodeGroup.append("text")
-    .text(d => d.label)
-    .attr('x', 0)
-    .attr('y', -12)
-    .join(
-      enter => enter,
-      update => update.attr('stroke', 'black')
-    )
+  const label = nodeGroup.append("foreignObject")
+    .attr('class', 'label-container')
+    .html(d => `<a href=${d.url}>${d.id}</a>`)
+    .attr('x', 6)
+    .attr('y', -3.6)
+    .attr('stroke', 'black')
 
   simulation.on("tick", () => {
     link

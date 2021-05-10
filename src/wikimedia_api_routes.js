@@ -2,7 +2,28 @@ const fetch = require('node-fetch');
 import regenerationRuntime from 'regenerator-runtime';
 
 
-async function fetchFirstLink(page, count = 1, group) {
+export async function fetchRandomArticleTitle() {
+  // const url = "https://en.wikipedia.org/w/api.php?origin=*&action=query&format=json&list=random&redirects=1&rnnamespace=0&rnlimit=1";
+  const url = "https://en.wikipedia.org/w/api.php?" +
+    new URLSearchParams({
+        origin: "*",
+        action: "query",
+        list: "random",
+        rnnamespace: 0,
+        rnlimit: 1,
+        format: "json",
+        redirects: 1
+    });
+
+  const req = await fetch(url);
+  const json = await req.json();
+  return json.query.random[0].title
+}
+
+
+export async function fetchFirstLink(page, count = 1, group) {
+  page = page.replaceAll(' ', '_');
+  console.log('input', page);
   const url = "https://en.wikipedia.org/w/api.php?" +
     new URLSearchParams({
         origin: "*",
@@ -13,18 +34,29 @@ async function fetchFirstLink(page, count = 1, group) {
         redirects: 1
     });
 
+  //fire GET request to url constructed above
   const req = await fetch(url);
   const json = await req.json();
-  // console.log(json.parse.text["*"].slice(0,50000));
-  const html = json.parse.text["*"];
+  let html;
+  try {
+    html = json.parse.text["*"];
+  }
+  catch (e) {
+    console.log('API Output: ', json)
+    throw e;
+  }
+
+  //create a DOM from the html string of the Wiki page
   const parser = new DOMParser();
   const DOM = parser.parseFromString(html, "text/html");
+
+  //Narrow down DOM to p tags in the body
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
  
-  // console.log('html', htmlElements);
-  
+  //Find relevant html element amongst all the p tags
   let relevantNode;
   while (relevantNode === undefined) {
+    //iterate through all tags within htmlElements
     for (let node of htmlElements) {
       let numChildNodes = 0;
       node.childNodes.forEach(child => {
@@ -38,32 +70,26 @@ async function fetchFirstLink(page, count = 1, group) {
         break
       }
     }
+
+    //if none of the p tags worked, it's probably a disambiguation page. Search within the li tags and start the loop over
     if (relevantNode === undefined) {
       htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
     }
   }
   
-  // console.log('relevantNode', relevantNode)
   const innerHTML = relevantNode.innerHTML;
-  // console.log('html', innerHTML)
 
   const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
 
   const mostMatches = innerHTML.match(paranthesesRegex) || innerHTML.match(noParanthesesRegex)
 
-  
-  // if (count > 1) {
-    // console.log('match', mostMatches)
-  // }
   const n = count - 1; //zero index;
   const nthMatch = mostMatches[n];
-  // console.log('nthMatch', nthMatch)
   const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/]+)/)[1];
-
+  console.log('new title: ', title)
   return {
-    id: title.toLowerCase(),
-    label: title.replaceAll('_', ' '),
+    id: title.toLowerCase().replaceAll('_', ' '),
     url: `https://en.wikipedia.org/wiki/${title}`,
     group: group,
     level: 1
@@ -71,4 +97,3 @@ async function fetchFirstLink(page, count = 1, group) {
 
 }
 
-export default fetchFirstLink;

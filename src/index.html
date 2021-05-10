@@ -5,6 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../dist/bundle.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@100&display=swap" rel="stylesheet">
+
+
     <link rel="stylesheet" href="../assets/stylesheets/reset.css">
     <link rel="stylesheet" href="../assets/stylesheets/styles.css">
 
@@ -15,13 +21,16 @@
     <h1 class="header">Philosopher's Road</h1>
     <h2 class="tagline">How far away is your Wikipedia article from the Philosophy page?</h2>
     <form class="article-form">
-      <input type="text" name="title" placeholder="article title or url">
-      <input type="submit" value="Submit"> 
+      <input type="text" name="title" placeholder="article title">
+      <input class="user-submit" type="submit" value="Submit">
+      <input class="random-submit" type="button" value="Random Article">
     </form>
 
     <svg id="graph-container">
-      <g class="links-group" stroke="#999" stroke-opacity="0.6"></g>
-      <g class="nodes-group" stroke="#fff" stroke-width="1.5"></g>
+      <g class="graph-viewbox">
+        <g class="links-group" stroke="#999" stroke-opacity="0.6"></g>
+        <g class="nodes-group" stroke="#fff" stroke-width="1.5"></g>
+      </g>
     </svg>
     
   </body>

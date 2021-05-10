@@ -1,8 +1,22 @@
 #graph-container {
-  border: 1px solid black
+  border: 1px solid black;
+  margin: 10px;
 }
 
-text {
+.label-container {
+  
   color: black;
+  font-family: 'Alegreya Sans SC', sans-serif;
+  letter-spacing: 1px;
+
+  display: inline-block;
+  height: 9px;
+  width: 10px;
+  font-size: 8px;
+  overflow: visible;
+}
+
+.label-container a {
+
 }
 
