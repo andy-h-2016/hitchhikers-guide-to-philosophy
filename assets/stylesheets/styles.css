@@ -1,11 +1,22 @@
-#graph-container {
+#main-container {
   border: 1px solid black;
   margin: 10px;
+  width: 500px;
+  height: 500px;
+  background-color: black
+}
+
+#construction-container {
+  border: 1px solid black;
+  margin: 10px;
+  width: 400px;
+  height: 200px;
+  background-color: black;
 }
 
 .label-container {
   
-  color: black;
+  color: white;
   font-family: 'Alegreya Sans SC', sans-serif;
   letter-spacing: 1px;
 
@@ -16,7 +27,4 @@
   overflow: visible;
 }
 
-.label-container a {
-
-}
 

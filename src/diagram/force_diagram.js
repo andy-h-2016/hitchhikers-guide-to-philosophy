@@ -1,9 +1,12 @@
 import * as d3 from 'd3';
-const d3Force = require('d3-force');
 
-export function createDiagram(nodes, links = []) {
+export function createDiagram(cssSelectors, nodes, links = []) {
+  console.log('nodes', nodes)
+  console.log('links', links)
   const height = window.innerHeight;
   const width = window.innerWidth;
+
+  //function for dragging nodes around
   const drag = simulation => {
   
     function dragstarted(event) {
@@ -29,8 +32,10 @@ export function createDiagram(nodes, links = []) {
         .on("end", dragended);
   };
 
+  //mapping color to a node's group number
   const scale = d3.scaleOrdinal(d3.schemeCategory10);
   const color = d => scale(d.group);
+
 
   const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d => d.id))
@@ -39,10 +44,10 @@ export function createDiagram(nodes, links = []) {
     // .force("x", d3.forceX())
     // .force("y", d3.forceY());
 
-  const svg = d3.select("svg")
-    .attr("viewBox", [0, 0, width*0.9, height*0.8]);
+  const svg = d3.select(cssSelectors.svg)
+    .attr("viewBox", [0, 0, width*0.9, height*0.65]);
 
-  const viewBox = d3.select(".graph-viewbox")
+  const viewBox = d3.select(cssSelectors.viewbox)
 
   svg.call(d3.zoom()
       .extent([[0, 0], [width, height]])
@@ -53,13 +58,13 @@ export function createDiagram(nodes, links = []) {
     viewBox.attr("transform", transform);
   }
 
-  const link = d3.select(".links-group")
+  const link = d3.select(cssSelectors.links)
     .selectAll("line")
     .data(links)
     .join("line")
     .attr("stroke-width", d => Math.sqrt(d.value));
 
-  const nodeGroup = d3.select(".nodes-group")
+  const nodeGroup = d3.select(cssSelectors.nodes)
     .selectAll("g")
     .data(nodes)
     .join(
