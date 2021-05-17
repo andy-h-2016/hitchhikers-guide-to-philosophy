@@ -51,13 +51,13 @@ const handleSubmit = async (e, input) => {
   //replace with API route to grab page title and url info
   
   //regex parse in case user pasted in a url
-  const wikiRegex = /https\:\/\/en\.wikipedia\.org\/wiki\/(.+)/
-  const titleMatch = input.match(wikiRegex);
+  const wikiRegex = /en\.wikipedia\.org\/wiki\/(.+)/
+  const urlMatch = input.match(wikiRegex);
 
   let nextPage;
-  if (titleMatch !== null) {
+  if (urlMatch) {
     nextPage = {
-      id: titleMatch[1],
+      id: urlMatch[1],
       url:  input,
       group: group,
       level: 1
