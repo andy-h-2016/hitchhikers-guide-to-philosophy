@@ -29,7 +29,15 @@ const constructionGraph = {
 const links = [];
 
 const submitRandomArticle = async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  
   const randomArticleTitle = await fetchRandomArticleTitle();
+
+  const userInput = document.querySelector('.user-input');
+  userInput.value = randomArticleTitle;
+
   handleSubmit(e, randomArticleTitle);
 } 
 
@@ -42,6 +50,7 @@ const handleSubmit = async (e, input) => {
   group += 1;
   //replace with API route to grab page title and url info
   
+  //regex parse in case user pasted in a url
   const wikiRegex = /https\:\/\/en\.wikipedia\.org\/wiki\/(.+)/
   const titleMatch = input.match(wikiRegex);
 

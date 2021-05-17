@@ -3,7 +3,6 @@ import regenerationRuntime from 'regenerator-runtime';
 
 
 export async function fetchRandomArticleTitle() {
-  // const url = "https://en.wikipedia.org/w/api.php?origin=*&action=query&format=json&list=random&redirects=1&rnnamespace=0&rnlimit=1";
   const url = "https://en.wikipedia.org/w/api.php?" +
     new URLSearchParams({
         origin: "*",
@@ -19,6 +18,20 @@ export async function fetchRandomArticleTitle() {
   const json = await req.json();
   return json.query.random[0].title
 }
+
+export async function fetchArticleTitle() {
+  const url = "https://en.wikipedia.org/w/api.php?" +
+    new URLSearchParams({
+        origin: "*",
+        action: "query",
+        format: "json",
+    });
+
+  const req = await fetch(url);
+  const json = await req.json();
+  return json.query.random[0].title
+}
+
 
 
 export async function fetchFirstLink(page, count = 1, group) {

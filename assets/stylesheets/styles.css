@@ -27,4 +27,6 @@
   overflow: visible;
 }
 
-
+.main-nodes > g > circle {
+  z-index: 10;
+}
