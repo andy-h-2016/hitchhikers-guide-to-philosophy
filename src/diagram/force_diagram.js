@@ -1,10 +1,24 @@
 import * as d3 from 'd3';
 
 export function createDiagram(cssSelectors, nodes, links = []) {
-  console.log('nodes', nodes)
-  console.log('links', links)
-  const height = window.innerHeight;
-  const width = window.innerWidth;
+  const svgDOM = document.querySelector(cssSelectors.svg);
+  const width = svgDOM.clientWidth;
+  const height = svgDOM.clientHeight;
+
+  const svg = d3.select(cssSelectors.svg)
+    .attr("viewBox", [-width / 2, -height / 2, width, height])
+
+  const viewBox = d3.select(cssSelectors.viewbox)
+
+  svg.call(d3.zoom()
+      .extent([[0, 0], [width, height]])
+      .scaleExtent([1, 8])
+      .on("zoom", zoomed));
+
+  function zoomed({transform}) {
+    viewBox.attr("transform", transform);
+  }
+
 
   //function for dragging nodes around
   const drag = simulation => {
@@ -38,25 +52,17 @@ export function createDiagram(cssSelectors, nodes, links = []) {
 
 
   const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2).strength(0.8));
-    // .force("x", d3.forceX())
-    // .force("y", d3.forceY());
+    .force("charge", d3.forceManyBody().strength(d => -30))
+    .force("link", d3.forceLink(links)
+      .id(d => d.id)
+      .distance(d => 30))
+    // .force("center", d3.forceCenter(width / 2, height / 2).strength(0.75));
+    // .force("x", d3.forceX().strength(0.1))
+    // .force("y", d3.forceY().strength(0.1));
 
-  const svg = d3.select(cssSelectors.svg)
-    .attr("viewBox", [0, 0, width*0.9, height*0.65]);
+  console.log('width', width)
+  console.log('height', height)
 
-  const viewBox = d3.select(cssSelectors.viewbox)
-
-  svg.call(d3.zoom()
-      .extent([[0, 0], [width, height]])
-      .scaleExtent([1, 8])
-      .on("zoom", zoomed));
-
-  function zoomed({transform}) {
-    viewBox.attr("transform", transform);
-  }
 
   const link = d3.select(cssSelectors.links)
     .selectAll("line")

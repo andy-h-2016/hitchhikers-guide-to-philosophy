@@ -1,6 +1,5 @@
 import {fetchFirstLink, fetchRandomArticleTitle} from './wikimedia_api_routes';
 import {createDiagram} from './diagram/force_diagram';
-debugger
 //input into d3 renderer as Object.values(nodes)
 let group = 0;
 const nodes = {
@@ -32,7 +31,6 @@ const submitRandomArticle = async (e) => {
   e.preventDefault();
   e.stopPropagation();
 
-  
   const randomArticleTitle = await fetchRandomArticleTitle();
 
   const userInput = document.querySelector('.user-input');
@@ -45,6 +43,9 @@ const handleSubmit = async (e, input) => {
   // grab a page
   e.preventDefault();
   e.stopPropagation();
+
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.remove('hidden');
 
   input ||= e.target[0].value;
   group += 1;
@@ -112,15 +113,13 @@ const handleSubmit = async (e, input) => {
     createDiagram(constructionGraph, Object.values(currentAdditions), copyOfCurrentLinks)
   }
 
-
-
   currentLinks.push({
     source: prevPage.id,
     target: nextPage.id,
     value: 1
   })
   
-  //reset construction graph
+  // reset construction graph
   const constructionContainer = document.querySelector('#construction-container');
   constructionContainer.innerHTML = `
     <g class='viewbox construction-viewbox'>
@@ -128,6 +127,7 @@ const handleSubmit = async (e, input) => {
       <g class='nodes construction-nodes' stroke='#fff' stroke-width='1.5'></g>
     </g>
     `;
+    sidebar.classList.add('hidden');
 
   //transfer key value pairs from currentAdditions to nodes
   for (let pageId in currentAdditions) {
@@ -135,7 +135,9 @@ const handleSubmit = async (e, input) => {
   }
 
   links.push(...currentLinks);
-  
+  debugger
+  console.log('nodes', Object.values(nodes))
+  console.log('links', links)
   createDiagram(mainGraph, Object.values(nodes), links);
 
 }

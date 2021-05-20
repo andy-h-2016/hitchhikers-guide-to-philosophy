@@ -12,20 +12,13 @@
 
 
     <link rel="stylesheet" href="../assets/stylesheets/reset.css">
+    <link rel="stylesheet" href="../assets/stylesheets/variables.css">
     <link rel="stylesheet" href="../assets/stylesheets/styles.css">
 
     <title>Philosopher's Road</title>
   </head>
   
   <body id="body">
-    <h1 class="header">Philosopher's Road</h1>
-    <h2 class="tagline">How far away is your Wikipedia article from the Philosophy page?</h2>
-    <form class="article-form">
-      <input class="user-input" type="text" name="title" placeholder="article title or url">
-      <input class="user-submit" type="submit" value="Submit">
-      <input class="random-submit" type="submit" value="Random Article">
-    </form>
-
     <svg id="main-container">
       <g class="viewbox main-viewbox">
         <g class="links main-links" stroke="#999" stroke-opacity="0.6"></g>
@@ -33,12 +26,24 @@
       </g>
     </svg>
 
-    <svg id="construction-container">
-      <g class="viewbox construction-viewbox">
-        <g class="links construction-links" stroke="#999" stroke-opacity="0.6"></g>
-        <g class="nodes construction-nodes" stroke="#fff" stroke-width="1.5"></g>
-      </g>
-    </svg>
+    <div class="sidebar hidden">
+      <h2>Constructing Road...</h2>
+      <svg id="construction-container">
+        <g class="viewbox construction-viewbox">
+          <g class="links construction-links" stroke="#999" stroke-opacity="0.6"></g>
+          <g class="nodes construction-nodes" stroke="#fff" stroke-width="1.5"></g>
+        </g>
+      </svg>
+    </div>
     
+    <div class="header">
+      <div class="title">Philosopher's Road</div>
+      <h2 class="tagline">How far away is your Wikipedia article from the Philosophy page?</h2>
+      <form class="article-form">
+        <input class="user-input" type="text" name="title" placeholder="article title or url">
+        <input class="user-submit" type="submit" value="Submit">
+        <input class="random-submit" type="submit" value="Random Article">
+      </form>
+    </div>
   </body>
 </html>
