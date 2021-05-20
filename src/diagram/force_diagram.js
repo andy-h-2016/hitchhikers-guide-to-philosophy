@@ -56,7 +56,7 @@ export function createDiagram(cssSelectors, nodes, links = []) {
     .force("link", d3.forceLink(links)
       .id(d => d.id)
       .distance(d => 30))
-    // .force("center", d3.forceCenter(width / 2, height / 2).strength(0.75));
+    .force("center", d3.forceCenter().strength(0.75));
     // .force("x", d3.forceX().strength(0.1))
     // .force("y", d3.forceY().strength(0.1));
 
