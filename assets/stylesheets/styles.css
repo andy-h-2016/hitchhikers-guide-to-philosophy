@@ -9,6 +9,8 @@ body {
   justify-content: center;
   align-items: center;
 
+  color: white;
+
   margin-top: var(--margin-top);
   margin-left: 50vw;
   transform: translate(-50%, 0)
@@ -21,7 +23,8 @@ body {
   border: 1px solid;
   width: 100vw;
   height: 100vh;
-  background-color: white;
+  /* background-color: white; */
+  background-image: url("../images/space.png");
   z-index: -1
 }
 
@@ -49,7 +52,7 @@ body {
 
 .label-container {
   
-  color: black;
+  color: white;
   font-family: 'Alegreya Sans SC', sans-serif;
   letter-spacing: 1px;
 
@@ -62,4 +65,14 @@ body {
 
 .main-nodes > g > circle {
   z-index: 10;
+}
+
+.links {
+  stroke: rgb(255, 255, 255);
+  stroke-opacity: 0.6;
+}
+
+.nodes {
+  stroke: #fff;
+  stroke-width: 1.5;
 }

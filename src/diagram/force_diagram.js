@@ -6,7 +6,7 @@ export function createDiagram(cssSelectors, nodes, links = []) {
   const height = svgDOM.clientHeight;
 
   const svg = d3.select(cssSelectors.svg)
-    .attr("viewBox", [-width / 2, -height / 2, width, height])
+    .attr("viewBox", [-width / 2, -height / 2, width * .75, height*.75])
 
   const viewBox = d3.select(cssSelectors.viewbox)
 
@@ -88,7 +88,7 @@ export function createDiagram(cssSelectors, nodes, links = []) {
     .html(d => `<a href=${d.url}>${d.id}</a>`)
     .attr('x', 6)
     .attr('y', -3.6)
-    .attr('stroke', 'black')
+    .attr('stroke', 'white')
 
   simulation.on("tick", () => {
     link
