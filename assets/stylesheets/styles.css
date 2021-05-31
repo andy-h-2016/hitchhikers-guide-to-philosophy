@@ -75,7 +75,11 @@ input:-webkit-autofill:active {
   width: 100vw;
   height: 100vh;
   /* background-color: white; */
-  background-image: url("../images/space-galaxy-background.jpg");
+  /* background-image: url("../images/space-galaxy-background.jpg"); */
+  background-image: url("../images/space-universe-stars.jpeg");
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+
   z-index: -1;
 }
 
@@ -114,7 +118,9 @@ input:-webkit-autofill:active {
   display: inline-block;
   height: 9px;
   width: 10px;
-  font-size: 8px;
+  font-size: 10px;
+  font-weight: 400;
+  font-weight: bold;
   overflow: visible;
 }
 
