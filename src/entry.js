@@ -157,6 +157,9 @@ document.addEventListener("DOMContentLoaded", () => {
   createDiagram(mainGraph, Object.values(nodes))
   const form = document.querySelector(".article-form");
   form.addEventListener("submit", handleSubmit);
+
+  const submitButton = document.querySelector(".user-submit");
+  submitButton.addEventListener("click", handleSubmit)
   
   const randomButton = document.querySelector('.random-submit');
   randomButton.addEventListener("click", submitRandomArticle);

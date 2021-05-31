@@ -37,6 +37,7 @@ body {
 
 .article-form i {
   margin-left: 5px;
+  cursor: pointer;
 }
 
 .user-input {
