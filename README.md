@@ -1,4 +1,4 @@
-# Wiki Road to Philosophy
+# The Hitchhiker's Guide To Philosophy
 
 ## Background
 An unplanned feature of Wikipedia is how many of its articles can lead back to the <a href="https://en.wikipedia.org/wiki/Philosophy">Philosophy</a> page. This phenomenon has spawned a game for people to race to get to the Philosophy page from a random Wikipedia article. It has even become notable enough to have its own <a href="https://en.wikipedia.org/wiki/Wikipedia:Getting_to_Philosophy">article</a> on Wikipedia. The Wiki Road to Philosohy visualizes the trail of articles that are traversed to get from any given article to the Philosophy page. The strategy employed is to traverse through the article with the shortest title (excluding acronyms since they stand for longer titles) with the assumption that articles with shorter titles are more likely to be abstract and therefore closer to the topic of philosophy.
