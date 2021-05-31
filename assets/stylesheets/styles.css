@@ -4,28 +4,79 @@ body {
 }
 
 .header {
+  position: relative;
+  font-size: 22px;
+
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  
+  padding-block: var(--margin-top);
+  
+  background-color: rgba(35, 42, 66, 0.5);
+  
+  /* margin-top: var(--margin-top); */
+  /* margin-left: 50vw; */
+  /* transform: translate(-50%, 0) */
+}
+
+.title {
+  color: white;
+  opacity: 100%;
+  margin-left: 10px;
+}
+
+.article-form {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  transform: translate(-50%);
+  left: 50%;
 
   color: white;
-
-  margin-top: var(--margin-top);
-  margin-left: 50vw;
-  transform: translate(-50%, 0)
 }
+
+.article-form i {
+  margin-left: 5px;
+}
+
+.user-input {
+  font-size: 18px;
+  background-color: transparent;
+  border: none;
+  border-bottom: white solid 1px;
+  color: white;
+  outline: none;
+}
+
+.user-input::placeholder {
+  color: white;
+  opacity: 0.7;
+}
+
+.user-input:focus {
+  outline: none;
+}
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: white;
+}
+
 
 #main-container {
   position: absolute;
-  top: calc(-1*var(--margin-top));
+  /* top: calc(-1*var(--margin-top)); */
 
   border: 1px solid;
   width: 100vw;
   height: 100vh;
   /* background-color: white; */
-  background-image: url("../images/space.png");
-  z-index: -1
+  background-image: url("../images/space-galaxy-background.jpg");
+  z-index: -1;
 }
 
 .sidebar{

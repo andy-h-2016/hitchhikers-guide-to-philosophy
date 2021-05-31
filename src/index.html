@@ -5,11 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../dist/bundle.js"></script>
+
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
-
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@100&display=swap" rel="stylesheet">
-
+    
+    <script src="https://kit.fontawesome.com/d84a5660b7.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="../assets/stylesheets/reset.css">
     <link rel="stylesheet" href="../assets/stylesheets/variables.css">
@@ -38,12 +39,12 @@
     </div>
     
     <div class="header">
-      <div class="title">Hitchhiker's Guide To Philosophy</div>
-      <h2 class="tagline">How far away is your Wikipedia article from the Philosophy page?</h2>
+      <div class="title">The Hitchhiker's Guide To Philosophy</div>
+      <!-- <h2 class="tagline">How far away is your Wikipedia article from the Philosophy page?</h2> -->
       <form class="article-form">
         <input class="user-input" type="text" name="title" placeholder="article title or url">
-        <input class="user-submit" type="submit" value="Submit">
-        <input class="random-submit" type="submit" value="Random Article">
+        <i class="fas fa-search user-submit"></i>
+        <i class="fas fa-dice-three random-submit"></i>       
       </form>
     </div>
 
