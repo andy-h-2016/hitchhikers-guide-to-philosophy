@@ -84,10 +84,13 @@ const handleSubmit = async (e, input) => {
 
     // check if page has already been visited
     // Output of while loop is a potentialPage that has not been visited before
-    while (!!currentAdditions[potentialPage]) {
+    console.log('currentAdditions', currentAdditions)
+    console.log('potentialPage', potentialPage)
+    console.log('currentAdditions[potentialPage]', currentAdditions[potentialPage])
+    while (!!currentAdditions[potentialPage.id]) {
       //count 
       count += 1;
-      console.log('DUPLICATE', potentialPage.id);
+      console.log('DUPLICATE', potentialPage.id, count);
       potentialPage = await fetchFirstLink(potentialPage.id, count, group)
       // return
     }
@@ -142,6 +145,12 @@ const handleSubmit = async (e, input) => {
 
 }
 
+const closeModal = (e, modal) => {
+  e.preventDefault();
+  e.stopPropagation();
+  console.log(modal)
+  modal.classList.add('is-close');
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   // updateDiagram(Object.values(nodes));
@@ -150,6 +159,12 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", handleSubmit);
   
   const randomButton = document.querySelector('.random-submit');
-  randomButton.addEventListener("click", submitRandomArticle)
+  randomButton.addEventListener("click", submitRandomArticle);
+
+  const modal = document.querySelector('.modal-screen');
+  modal.addEventListener("click", (e) => closeModal(e, modal));
+
+  const modalForm = document.querySelector('.modal-form');
+  modalForm.addEventListener("click", e => e.stopPropagation());
 });
 

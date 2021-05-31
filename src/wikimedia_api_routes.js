@@ -53,6 +53,7 @@ export async function fetchFirstLink(page, count = 1, group) {
   let html;
   try {
     html = json.parse.text["*"];
+    console.log('html', html)
   }
   catch (e) {
     console.log('API Output: ', json)
@@ -91,6 +92,7 @@ export async function fetchFirstLink(page, count = 1, group) {
   }
   
   const innerHTML = relevantNode.innerHTML;
+  console.log('innerHTML', innerHTML)
 
   const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;

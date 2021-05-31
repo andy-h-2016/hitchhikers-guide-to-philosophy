@@ -1,0 +1,31 @@
+.modal-screen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-form {
+  position: absolute;
+  top: 25vh;
+  left: 50vw;
+  transform: translate(-50%);
+  z-index: 3;
+
+  width: 50vw;
+  height: 50vh;
+  background-color: rgb(192, 192, 192);
+  border-radius: 10px;
+}
+
+.is-close {
+  display: none;
+  z-index: -10;
+}
+
+.modal-title {
+  color: black;
+}

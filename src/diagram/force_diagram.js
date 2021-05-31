@@ -1,5 +1,7 @@
 import * as d3 from 'd3';
 
+const RADIUS = 4;
+
 export function createDiagram(cssSelectors, nodes, links = []) {
   const svgDOM = document.querySelector(cssSelectors.svg);
   const width = svgDOM.clientWidth;
@@ -60,10 +62,6 @@ export function createDiagram(cssSelectors, nodes, links = []) {
     // .force("x", d3.forceX().strength(0.1))
     // .force("y", d3.forceY().strength(0.1));
 
-  console.log('width', width)
-  console.log('height', height)
-
-
   const link = d3.select(cssSelectors.links)
     .selectAll("line")
     .data(links)
@@ -79,7 +77,7 @@ export function createDiagram(cssSelectors, nodes, links = []) {
     )
   
   const node = nodeGroup.append("circle")
-    .attr("r", 4)
+    .attr("r", RADIUS)
     .attr("fill", color)
     .call(drag(simulation));
 
@@ -91,6 +89,11 @@ export function createDiagram(cssSelectors, nodes, links = []) {
     .attr('stroke', 'white')
 
   simulation.on("tick", () => {
+    // node
+    //     .attr("cx", function(d) { return d.x = Math.max(RADIUS, Math.min(width - RADIUS, d.x)); })
+    //     .attr("cy", function(d) { return d.y = Math.max(RADIUS, Math.min(height - RADIUS, d.y)); });
+
+
     link
       .attr("x1", d => d.source.x)
       .attr("y1", d => d.source.y)
