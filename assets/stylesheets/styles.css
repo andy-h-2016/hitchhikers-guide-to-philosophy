@@ -75,3 +75,11 @@ body {
   stroke: #fff;
   stroke-width: 1.5;
 }
+
+.profile-links {
+  width: 30px;
+}
+
+.github-link {
+  color: white;
+}
