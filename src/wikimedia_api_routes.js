@@ -53,7 +53,6 @@ export async function fetchFirstLink(page, count = 1, group) {
   let html;
   try {
     html = json.parse.text["*"];
-    console.log('html', html)
   }
   catch (e) {
     console.log('API Output: ', json)

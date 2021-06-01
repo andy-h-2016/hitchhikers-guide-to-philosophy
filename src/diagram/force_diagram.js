@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-const RADIUS = 4;
+const RADIUS = 5;
 
 export function createDiagram(cssSelectors, nodes, links = []) {
   const svgDOM = document.querySelector(cssSelectors.svg);
@@ -8,7 +8,7 @@ export function createDiagram(cssSelectors, nodes, links = []) {
   const height = svgDOM.clientHeight;
 
   const svg = d3.select(cssSelectors.svg)
-    .attr("viewBox", [-width / 2, -height / 2, width * .75, height*.75])
+    .attr("viewBox", [-width / 2, -height / 2, width, height])
 
   const viewBox = d3.select(cssSelectors.viewbox)
 
@@ -54,13 +54,16 @@ export function createDiagram(cssSelectors, nodes, links = []) {
 
 
   const simulation = d3.forceSimulation(nodes)
-    .force("charge", d3.forceManyBody().strength(d => -30))
+    .force("charge", d3.forceManyBody().strength(d => -10))
     .force("link", d3.forceLink(links)
       .id(d => d.id)
-      .distance(d => 30))
-    .force("center", d3.forceCenter().strength(0.75));
+      .distance(d => 45))
+    .force("center", d3.forceCenter().strength(0.5));
     // .force("x", d3.forceX().strength(0.1))
     // .force("y", d3.forceY().strength(0.1));
+
+
+
 
   const link = d3.select(cssSelectors.links)
     .selectAll("line")
@@ -84,16 +87,11 @@ export function createDiagram(cssSelectors, nodes, links = []) {
   const label = nodeGroup.append("foreignObject")
     .attr('class', 'label-container')
     .html(d => `<a href=${d.url}>${d.id}</a>`)
-    .attr('x', 6)
-    .attr('y', -3.6)
+    .attr('x', RADIUS + 2)
+    .attr('y', -(RADIUS * 1.3))
     .attr('stroke', 'white')
 
-  simulation.on("tick", () => {
-    // node
-    //     .attr("cx", function(d) { return d.x = Math.max(RADIUS, Math.min(width - RADIUS, d.x)); })
-    //     .attr("cy", function(d) { return d.y = Math.max(RADIUS, Math.min(height - RADIUS, d.y)); });
-
-
+  simulation.on("tick", () => {    
     link
       .attr("x1", d => d.source.x)
       .attr("y1", d => d.source.y)

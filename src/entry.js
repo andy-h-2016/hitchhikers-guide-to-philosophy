@@ -1,6 +1,7 @@
 import {fetchFirstLink, fetchRandomArticleTitle} from './wikimedia_api_routes';
 import {createDiagram} from './diagram/force_diagram';
 //input into d3 renderer as Object.values(nodes)
+
 let group = 0;
 const nodes = {
   philosophy: {
@@ -44,10 +45,12 @@ const handleSubmit = async (e, input) => {
   e.preventDefault();
   e.stopPropagation();
 
+  
   const sidebar = document.querySelector('.sidebar');
   sidebar.classList.remove('hidden');
-
-  input ||= e.target[0].value;
+  
+  const inputEle = document.querySelector('.user-input')
+  input ||= inputEle.value;
   group += 1;
   //replace with API route to grab page title and url info
   
@@ -84,19 +87,19 @@ const handleSubmit = async (e, input) => {
 
     // check if page has already been visited
     // Output of while loop is a potentialPage that has not been visited before
-    console.log('currentAdditions', currentAdditions)
-    console.log('potentialPage', potentialPage)
-    console.log('currentAdditions[potentialPage]', currentAdditions[potentialPage])
+    // console.log('currentAdditions', currentAdditions)
+    // console.log('potentialPage', potentialPage)
+    // console.log('currentAdditions[potentialPage]', currentAdditions[potentialPage])
     while (!!currentAdditions[potentialPage.id]) {
       //count 
       count += 1;
-      console.log('DUPLICATE', potentialPage.id, count);
+      // console.log('DUPLICATE', potentialPage.id, count);
       potentialPage = await fetchFirstLink(potentialPage.id, count, group)
       // return
     }
     prevPage = nextPage;
     nextPage = potentialPage; // the unvisited potentialPage becomews the next Page
-    console.log('nextPage', nextPage)
+    // console.log('nextPage', nextPage)
 
     //If page doesn't already exist, add it into the nodes and add corresponding list
     //otherwise do nothing. While loop will break when the conditional below is false.
@@ -139,8 +142,8 @@ const handleSubmit = async (e, input) => {
 
   links.push(...currentLinks);
   debugger
-  console.log('nodes', Object.values(nodes))
-  console.log('links', links)
+  // console.log('nodes', Object.values(nodes))
+  // console.log('links', links)
   createDiagram(mainGraph, Object.values(nodes), links);
 
 }
@@ -148,7 +151,6 @@ const handleSubmit = async (e, input) => {
 const closeModal = (e, modal) => {
   e.preventDefault();
   e.stopPropagation();
-  console.log(modal)
   modal.classList.add('is-close');
 }
 
@@ -156,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // updateDiagram(Object.values(nodes));
   createDiagram(mainGraph, Object.values(nodes))
   const form = document.querySelector(".article-form");
+  
   form.addEventListener("submit", handleSubmit);
 
   const submitButton = document.querySelector(".user-submit");
@@ -164,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const randomButton = document.querySelector('.random-submit');
   randomButton.addEventListener("click", submitRandomArticle);
 
-  
   const modal = document.querySelector('.modal-screen');
   modal.addEventListener("click", e => closeModal(e, modal));
   
@@ -173,5 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const modalForm = document.querySelector('.modal-form');
   modalForm.addEventListener("click", e => e.stopPropagation());
+
+
 });
 
