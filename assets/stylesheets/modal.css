@@ -10,15 +10,19 @@
 
 .modal-form {
   position: absolute;
-  top: 25vh;
+  top: 50vh;
   left: 50vw;
-  transform: translate(-50%);
-  z-index: 3;
+  transform: translate(-50%, -50%);
+  z-index: 3;   
 
   width: 50vw;
-  height: 50vh;
+  height: fit-content;
   background-color: rgb(192, 192, 192);
   border-radius: 10px;
+}
+
+.modal-form > * {
+  margin: 16px;
 }
 
 .is-close {
@@ -28,4 +32,43 @@
 
 .modal-title {
   color: black;
+  width: fit-content;
+  margin: 16px auto;
+  font-size: 24px;
+  font-family: 'Karla', sans-serif;
+} 
+
+.intro {
+  font-size: 20px;
+}
+
+.modal-form a {
+  color: blue;
+}
+
+.modal-form a:hover {
+  text-decoration: underline;
+}
+
+sup {
+  font-size: 12px;
+}
+
+.close-modal {
+  padding: 4px 6px;
+  border-radius: 4px;
+  width: fit-content;
+  margin-left: 50%;
+  transform: translate(-50%);
+  
+  font-family: 'Karla', sans-serif;
+  background-color: rgb(37, 158, 37);
+}
+
+#footnote {
+  font-size: 12px;
+}
+
+#carrot {
+  font-weight: 800;
 }

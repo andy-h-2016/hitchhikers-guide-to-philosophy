@@ -164,8 +164,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const randomButton = document.querySelector('.random-submit');
   randomButton.addEventListener("click", submitRandomArticle);
 
+  
   const modal = document.querySelector('.modal-screen');
-  modal.addEventListener("click", (e) => closeModal(e, modal));
+  modal.addEventListener("click", e => closeModal(e, modal));
+  
+  const closeButton = document.querySelector('.close-modal');
+  closeButton.addEventListener("click", e => closeModal(e, modal))
 
   const modalForm = document.querySelector('.modal-form');
   modalForm.addEventListener("click", e => e.stopPropagation());

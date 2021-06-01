@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@100&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@1,800&display=swap" rel="stylesheet">
+
 
     <script src="https://kit.fontawesome.com/d84a5660b7.js" crossorigin="anonymous"></script>
 
@@ -41,7 +43,7 @@
     </div>
     
     <div class="header">
-      <div class="title">The Hitchhiker's Guide To Philosophy</div>
+      <div class="title">The Philosopher's Guide to Wikipedia</div>
       <!-- <h2 class="tagline">How far away is your Wikipedia article from the Philosophy page?</h2> -->
       <form class="article-form">
         <input class="user-input" type="text" name="title" placeholder="article title or url">
@@ -50,11 +52,20 @@
       </form>
     </div>
 
-    <div class="modal">
-      <div class="modal-screen">
-        <div class="modal-form">
-          <h2 class="modal-title">Hitchhiker's Guide To Philosophy</h2>
-          <p class="intro">Hitchhiker's Guide To Philosophy takes you on a guided tour of the Wikipedia galaxy. Over 97% of Wikipedia articles will eventually lead to the Philosophy page. The Hitchhiker app plots the route to </p>
+    <div class="modal-screen">
+      <div class="modal-form">
+        <h2 class="modal-title">The Philosopher's Guide to Wikipedia</h2>
+        <p class="intro">
+          The Philosopher's Guide to Wikipedia takes you on a guided 
+          tour of the Wikipedia galaxy. Hitchhike your way from any article<sup id="footnote-reference">[<a href="#footnote">1</a>]</sup> 
+          to the Philosophy page. Simply search for an article or hit the random button to start exploring! 
+        </p>
+
+        <button class="close-modal">Explore</button>
+        
+        <div id="footnote">
+          1. <a id="carrot" href="#footnote-reference">^</a> Fine. 97% of articles.
+          <a href="https://en.wikipedia.org/wiki/Wikipedia:Getting_to_Philosophy">Wikipedia: Getting to Philosophy</a> 
         </div>
       </div>
     </div>
