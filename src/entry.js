@@ -141,7 +141,6 @@ const handleSubmit = async (e, input) => {
   }
 
   links.push(...currentLinks);
-  debugger
   // console.log('nodes', Object.values(nodes))
   // console.log('links', links)
   createDiagram(mainGraph, Object.values(nodes), links);

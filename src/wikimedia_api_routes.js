@@ -53,6 +53,7 @@ export async function fetchFirstLink(page, count = 1, group) {
   let html;
   try {
     html = json.parse.text["*"];
+    console.log('html', html)
   }
   catch (e) {
     console.log('API Output: ', json)
@@ -62,7 +63,7 @@ export async function fetchFirstLink(page, count = 1, group) {
   //create a DOM from the html string of the Wiki page
   const parser = new DOMParser();
   const DOM = parser.parseFromString(html, "text/html");
-
+  
   //Narrow down DOM to p tags in the body
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
  
