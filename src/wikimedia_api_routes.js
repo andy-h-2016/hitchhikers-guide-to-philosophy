@@ -53,7 +53,6 @@ export async function fetchFirstLink(page, count = 1, group) {
   let html;
   try {
     html = json.parse.text["*"];
-    // console.log('html', html)
   }
   catch (e) {
     console.log('API Output: ', json)
@@ -66,9 +65,11 @@ export async function fetchFirstLink(page, count = 1, group) {
   
   //Narrow down DOM to p tags in the body
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
-  // console.log('htmlElements', htmlElements)
-  // let htmlElements = DOM.querySelectorAll(".mw-parser-output");
-  // //Find relevant html element amongst all the p tags
+
+  if (htmlElements[0].outerHTML.match(/may refer to/)) {
+    htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
+  }
+
   let relevantNodes;
     //iterate through all tags within htmlElements
     for (let node of htmlElements) {
@@ -83,17 +84,6 @@ export async function fetchFirstLink(page, count = 1, group) {
         relevantNodes += node.outerHTML;
       }
     }
-  // console.log('relevantNodes', relevantNodes)
-  //   //if none of the p tags worked, it's probably a disambiguation page. Search within the li tags and start the loop over
-  //   if (relevantNode === undefined) {
-  //     htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
-  //   }
-  // }
-  
-  // const innerHTML = relevantNode.innerHTML;
-  // console.log('innerHTML', innerHTML)
-
-  // const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
   const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
 

@@ -91,19 +91,12 @@ const handleSubmit = async (e, input) => {
 
     // check if page has already been visited
     // Output of while loop is a potentialPage that has not been visited before
-    // console.log('currentAdditions', currentAdditions)
-    // console.log('potentialPage', potentialPage)
-    // console.log('currentAdditions[potentialPage]', currentAdditions[potentialPage])
     while (!!currentAdditions[potentialPage.id]) {
-      //count 
       count += 1;
-      // console.log('DUPLICATE', potentialPage.id, count);
       potentialPage = await fetchFirstLink(potentialPage.id, count, group)
-      // return
     }
     prevPage = nextPage;
     nextPage = potentialPage; // the unvisited potentialPage becomews the next Page
-    // console.log('nextPage', nextPage)
 
     //If page doesn't already exist, add it into the nodes and add corresponding list
     //otherwise do nothing. While loop will break when the conditional below is false.
@@ -145,8 +138,6 @@ const handleSubmit = async (e, input) => {
   }
 
   links.push(...currentLinks);
-  // console.log('nodes', Object.values(nodes))
-  // console.log('links', links)
   createDiagram(mainGraph, Object.values(nodes), links);
 
 }
@@ -158,7 +149,6 @@ const closeModal = (e, modal) => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // updateDiagram(Object.values(nodes));
   createDiagram(mainGraph, Object.values(nodes))
   const form = document.querySelector(".article-form");
   
