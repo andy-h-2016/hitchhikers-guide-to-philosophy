@@ -4,8 +4,8 @@ import {createDiagram} from './diagram/force_diagram';
 
 let group = 0;
 const nodes = {
-  philosophy: {
-    id: "philosophy", 
+  Philosophy: {
+    id: "Philosophy", 
     url: "https://en.wikipedia.org/wiki/Philosophy",
     group: group, 
     level: 1
@@ -82,6 +82,10 @@ const handleSubmit = async (e, input) => {
   currentAdditions[nextPage.id] = nextPage;
   const currentLinks = [];
   while (!nodes[nextPage.id]) {
+    console.log('nodes', nodes)
+    console.log('nextPage', nextPage)
+    console.log('nextPage.id', nextPage.id)
+    console.log(nodes[nextPage.id] === "Philosophy") 
     let count = 1;
     let potentialPage = await fetchFirstLink(nextPage.id, count, group);
 

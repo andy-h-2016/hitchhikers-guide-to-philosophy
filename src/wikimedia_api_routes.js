@@ -53,7 +53,7 @@ export async function fetchFirstLink(page, count = 1, group) {
   let html;
   try {
     html = json.parse.text["*"];
-    console.log('html', html)
+    // console.log('html', html)
   }
   catch (e) {
     console.log('API Output: ', json)
@@ -66,10 +66,10 @@ export async function fetchFirstLink(page, count = 1, group) {
   
   //Narrow down DOM to p tags in the body
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
- 
-  //Find relevant html element amongst all the p tags
-  let relevantNode;
-  while (relevantNode === undefined) {
+  // console.log('htmlElements', htmlElements)
+  // let htmlElements = DOM.querySelectorAll(".mw-parser-output");
+  // //Find relevant html element amongst all the p tags
+  let relevantNodes;
     //iterate through all tags within htmlElements
     for (let node of htmlElements) {
       let numChildNodes = 0;
@@ -80,31 +80,31 @@ export async function fetchFirstLink(page, count = 1, group) {
       });
 
       if (numChildNodes > 1 && node.innerHTML.match(/<a/)) {
-        relevantNode = node;
-        break
+        relevantNodes += node.outerHTML;
       }
     }
-
-    //if none of the p tags worked, it's probably a disambiguation page. Search within the li tags and start the loop over
-    if (relevantNode === undefined) {
-      htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
-    }
-  }
+  // console.log('relevantNodes', relevantNodes)
+  //   //if none of the p tags worked, it's probably a disambiguation page. Search within the li tags and start the loop over
+  //   if (relevantNode === undefined) {
+  //     htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
+  //   }
+  // }
   
-  const innerHTML = relevantNode.innerHTML;
-  console.log('innerHTML', innerHTML)
+  // const innerHTML = relevantNode.innerHTML;
+  // console.log('innerHTML', innerHTML)
 
-  const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
-  const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  // const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category)[\w_\(\):\-\.\/"]+"/g;
+  const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
+  const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
 
-  const mostMatches = innerHTML.match(paranthesesRegex) || innerHTML.match(noParanthesesRegex)
+  const mostMatches = relevantNodes.match(paranthesesRegex) || relevantNodes.match(noParanthesesRegex)
 
   const n = count - 1; //zero index;
   const nthMatch = mostMatches[n];
   const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/]+)/)[1];
-  console.log('new title: ', title)
+  console.log('new title: ',title)
   return {
-    id: title.toLowerCase().replaceAll('_', ' '),
+    id: title.replaceAll('_', ' '),
     url: `https://en.wikipedia.org/wiki/${title}`,
     group: group,
     level: 1
