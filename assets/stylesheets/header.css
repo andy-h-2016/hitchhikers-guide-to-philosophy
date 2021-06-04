@@ -1,6 +1,6 @@
 .header {
   position: relative;
-  font-size: 22px;
+  font-size: var(--header-font-size);
 
   display: flex;
   align-items: center;

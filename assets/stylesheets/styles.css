@@ -1,6 +1,9 @@
 body {
   position: relative;
   width: 100vw;
+  background-image: url("../images/space-universe-stars.jpeg");
+  background-size: 100% auto;
+  background-repeat: no-repeat; /* height: 100vh; */
 }
 
 
@@ -10,13 +13,10 @@ body {
   /* top: calc(-1*var(--margin-top)); */
 
   border: 1px solid;
-  width: 100vw;
-  height: 100vh;
+  width: var(--page-width);
+  height: var(--page-height);
   /* background-color: white; */
   /* background-image: url("../images/space-galaxy-background.jpg"); */
-  background-image: url("../images/space-universe-stars.jpeg");
-  background-size: 100% auto;
-  background-repeat: no-repeat;
 
   z-index: -1;
 }
@@ -76,10 +76,38 @@ body {
   stroke-width: 1.5;
 }
 
-.profile-links {
-  width: 30px;
+.icons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+  position: relative;
+  top: calc(-2*(var(--margin-top) + var(--header-font-size)));
+  /* bottom: 0;
+  left: 50%;
+  transform: translate(-50%); */
+
+  height: var(--page-height);
+  /* transform: translate(0, -1*var(--margin-top)); */
+  width: fit-content;
+
+  font-size: var(--icon-size);
+  /* z-index: -10; */
 }
 
-.github-link {
-  color: white;
+.icons * {
+  display: inline-block;
 }
+
+.icons a {
+  width: fit-content;
+}
+
+.fab, .far {
+  margin-top: 20px;
+}
+
+
+/* .github-link {
+  color: white;
+} */
