@@ -25,5 +25,10 @@
   },
   "plugins": [
     "@babel/plugin-transform-runtime"
-  ]
+  ],
+  "engines": {
+    "node": "15.12.0",
+    "npm": "7.6.3"
+  }
+
 }
