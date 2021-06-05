@@ -117,8 +117,12 @@ body {
 }
 
 .linkedin-link {
-  left: 3.125px;
   color: #0a66c2;
+  left: 3px;
+}
+
+.linkedin-logo {
+  width: calc(var(--icon-size) - 6px);
 }
 
 .github-link {
@@ -129,13 +133,3 @@ body {
   width: fit-content;
 }
 
-
-
-.fab, .far {
-  /* margin-top: 20px; */
-}
-
-
-/* .github-link {
-  color: white;
-} */
