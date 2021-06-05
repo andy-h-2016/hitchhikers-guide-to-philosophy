@@ -1,22 +1,18 @@
 body {
   position: relative;
-  width: 100vw;
-  background-image: url("../images/space-universe-stars.jpeg");
-  background-size: 100% auto;
-  background-repeat: no-repeat; /* height: 100vh; */
 }
 
 
 
 #main-container {
+  background-image: url("../images/space-universe-stars.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
   position: absolute;
-  /* top: calc(-1*var(--margin-top)); */
 
   border: 1px solid;
   width: var(--page-width);
   height: var(--page-height);
-  /* background-color: white; */
-  /* background-image: url("../images/space-galaxy-background.jpg"); */
 
   z-index: -1;
 }
@@ -76,35 +72,67 @@ body {
   stroke-width: 1.5;
 }
 
-.icons {
+/* .icons {
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin-left: 10px;
   position: relative;
-  top: calc(-2*(var(--margin-top) + var(--header-font-size)));
+  top: calc(-2*(var(--margin-top) + var(--header-font-size))); */
   /* bottom: 0;
   left: 50%;
   transform: translate(-50%); */
 
-  height: var(--page-height);
+  /* height: var(--page-height); */
   /* transform: translate(0, -1*var(--margin-top)); */
-  width: fit-content;
+  /* width: fit-content; */
 
+  /* font-size: var(--icon-size); */
+  /* z-index: -10;
+} */
+
+.icons {
   font-size: var(--icon-size);
-  /* z-index: -10; */
+
+  position: absolute;
+  /* top: calc(-2*(var(--margin-top) + var(--header-font-size)) + 50vh);  */
+  top: 46vh;
+  left: 10px;
+
 }
 
-.icons * {
+.icons > * {
   display: inline-block;
+  position: absolute
+}
+
+.top-icon {
+  top: calc(-1.8 * var(--icon-size))
+  /* top: calc(0.5*var(--icon-size)) */
+}
+
+.bottom-icon {
+  /* top: calc(-0.5*var(--icon-size)) */
+  top: calc(1.8 * var(--icon-size))
+}
+
+.linkedin-link {
+  left: 3.125px;
+  color: #0a66c2;
+}
+
+.github-link {
+  left: 0.78px;
 }
 
 .icons a {
   width: fit-content;
 }
 
+
+
 .fab, .far {
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 
