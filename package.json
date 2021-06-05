@@ -8,7 +8,7 @@
     "start": "webpack --watch",
     "postinstall": "webpack"
   },
-  "keywords": [],
+  "keywords": [], 
   "author": "",
   "license": "ISC",
   "dependencies": {
