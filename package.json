@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "./src/entry.js",
+  "homepage": "https://andy-h-2016.github.io/hitchhikers-guide-to-philosophy/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch",
