@@ -32,6 +32,11 @@
   cursor: pointer;
 }
 
+.article-form i:hover {
+  color: rgb(5, 216, 253);
+  transition: 0.5s;
+}
+
 .user-input {
   font-size: 18px;
   background-color: transparent;
@@ -48,6 +53,8 @@
 
 .user-input:focus {
   outline: none;
+  border-bottom:rgb(5, 216, 253) solid 1px;
+  transition: 0.5s;
 }
 
 
