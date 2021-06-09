@@ -67,27 +67,40 @@ export async function fetchFirstLink(page, count = 1, group) {
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
 
   if (htmlElements[0].outerHTML.match(/may refer to/)) {
+    // the phrase "may refer to" is used in the first p tag of disambiguation pages
+    // which predominantly use list items instead of p tags
     htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
   }
 
   let relevantNodes;
     //iterate through all tags within htmlElements
+  // let relevantNode;
+  // while (relevantNode === undefined) {
     for (let node of htmlElements) {
       let numChildNodes = 0;
       node.childNodes.forEach(child => {
         if (child.nodeValue !== "\n") {
+          // only counting nodes that are more than just a newline
           numChildNodes += 1;
         }
       });
 
       if (numChildNodes > 1 && node.innerHTML.match(/<a/)) {
         relevantNodes += node.outerHTML;
+        // relevantNode = node;
+        // break
       }
     }
+
+    // if (relevantNode === undefined) {
+    //   htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
+    // }
+  // }
   const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
 
   const mostMatches = relevantNodes.match(paranthesesRegex) || relevantNodes.match(noParanthesesRegex)
+  // const mostMatches = relevantNode.innerHTML.match(paranthesesRegex) || relevantNode.innerHTML.match(noParanthesesRegex)
 
   const n = count - 1; //zero index;
   const nthMatch = mostMatches[n];

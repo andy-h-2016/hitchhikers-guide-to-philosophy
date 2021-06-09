@@ -113,7 +113,8 @@ body {
 
 .bottom-icon {
   /* top: calc(-0.5*var(--icon-size)) */
-  top: calc(1.8 * var(--icon-size))
+  top: calc(1.8 * var(--icon-size));
+  color: rgb(255, 123, 0)
 }
 
 .linkedin-link {
@@ -127,9 +128,38 @@ body {
 
 .github-link {
   left: 0.78px;
+  color: moccasin
 }
 
 .icons a {
   width: fit-content;
 }
 
+.instructions-container {
+  font-size: 14px;
+
+  color: white;
+  background-color: slategray;
+
+  border-radius: 4px;
+  padding: 4px;
+  width: 140px;
+
+  position: absolute;
+  top: calc((50px - 34px) / 2);
+  left: calc(var(--icon-size) + 15px);
+}
+
+.instructions-container:after {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  transform:translateY(-50%);
+  z-index: -1;
+ 
+  /* the arrow */
+  border: 8px solid slategray;
+  border-color: transparent slategray transparent transparent;
+
+}

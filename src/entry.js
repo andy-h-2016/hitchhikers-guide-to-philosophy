@@ -148,6 +148,10 @@ const closeModal = (e, modal) => {
   modal.classList.add('is-close');
 }
 
+const toggleInstructions = e => {
+  e.currentTarget.firstElementChild.classList.toggle("hidden")
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   createDiagram(mainGraph, Object.values(nodes))
   const form = document.querySelector(".article-form");
@@ -169,6 +173,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalForm = document.querySelector('.modal-form');
   modalForm.addEventListener("click", e => e.stopPropagation());
 
+  const instructionsIcon = document.querySelector('.instructions-icon');
+  instructionsIcon.addEventListener("mouseenter", toggleInstructions);
+  instructionsIcon.addEventListener("mouseleave", toggleInstructions);
 
 });
 
