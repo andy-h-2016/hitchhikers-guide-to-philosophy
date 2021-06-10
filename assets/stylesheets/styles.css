@@ -20,7 +20,7 @@ body {
 .sidebar{
   position: absolute;
   right: 0;
-  top: calc(-1*var(--margin-top));
+  /* top: calc(-1*var(--margin-top)); */
 
   border: 1px solid black;
   width: 33vw;
@@ -28,9 +28,20 @@ body {
   background-color: white;
   z-index: -1;
   background-image: url("../images/wormhole-grid.jpg");
-  background-position: center;
-  background-size: contain;
+  background-position: right;
+  background-size: cover;
   background-repeat: no-repeat;
+  z-index: 10;
+}
+
+.sidebar-title {
+  color: white;
+  margin-top: var(--margin-top);
+  margin-left: var(--margin-top);
+  font-size: var(--header-font-size);
+  background-color: black;
+  width: fit-content;
+  border-radius: 4px;
 }
 
 .hidden {
@@ -107,7 +118,7 @@ body {
 }
 
 .top-icon {
-  top: calc(-1.8 * var(--icon-size))
+  top: calc(-1.9 * var(--icon-size))
   /* top: calc(0.5*var(--icon-size)) */
 }
 
