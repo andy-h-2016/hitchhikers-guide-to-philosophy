@@ -2,6 +2,7 @@
 var path = require('path');
 
 module.exports = {
+  context: __dirname,
   entry: './src/entry.js',
   output: {
     filename: 'bundle.js',
@@ -15,7 +16,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/env', '@babel/react']
+            presets: ['@babel/env']
           }
         },
       }
