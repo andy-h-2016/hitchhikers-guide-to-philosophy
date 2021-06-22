@@ -4,7 +4,6 @@
   "description": "",
   "main": "./src/entry.js",
   "homepage": "https://andy-h-2016.github.io/hitchhikers-guide-to-philosophy/",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch",
@@ -21,7 +20,6 @@
     "@babel/preset-react": "^7.13.13",
     "babel-loader": "^8.2.2",
     "d3": "^6.7.0",
-    "d3-force": "^2.1.1",
     "node-fetch": "^2.6.1",
     "webpack": "^5.35.1",
     "webpack-cli": "^4.6.0"

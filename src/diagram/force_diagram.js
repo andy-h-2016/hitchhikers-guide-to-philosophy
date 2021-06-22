@@ -43,9 +43,9 @@ export function createDiagram(cssSelectors, nodes, links = []) {
     }
     
     return d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
   };
 
   //mapping color to a node's group number
@@ -58,7 +58,7 @@ export function createDiagram(cssSelectors, nodes, links = []) {
     .force("link", d3.forceLink(links)
       .id(d => d.id)
       .distance(d => 45))
-    .force("center", d3.forceCenter().strength(0.01));
+    .force("center", d3.forceCenter().strength(0.05));
     // .force("x", d3.forceX().strength(0.1))
     // .force("y", d3.forceY().strength(0.1));
 
@@ -99,7 +99,8 @@ export function createDiagram(cssSelectors, nodes, links = []) {
       .attr("y2", d => d.target.y);
 
     nodeGroup
-      .attr("transform", d => `translate(${d.x}, ${d.y})`)
+      .attr("transform", d => `translate(${d.x}, ${d.y})`);
+
   });
 
   return svg.node();

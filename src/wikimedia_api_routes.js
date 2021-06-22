@@ -35,8 +35,8 @@ export async function fetchArticleTitle() {
 
 
 export async function fetchFirstLink(page, count = 1, group) {
+  console.log('input: ', page)
   page = page.replaceAll(' ', '_');
-  console.log('input', page);
   const url = "https://en.wikipedia.org/w/api.php?" +
     new URLSearchParams({
         origin: "*",
@@ -46,7 +46,7 @@ export async function fetchFirstLink(page, count = 1, group) {
         format: "json",
         redirects: 1
     });
-
+    
   //fire GET request to url constructed above
   const req = await fetch(url);
   const json = await req.json();
@@ -55,7 +55,6 @@ export async function fetchFirstLink(page, count = 1, group) {
     html = json.parse.text["*"];
   }
   catch (e) {
-    console.log('API Output: ', json)
     throw e;
   }
 
@@ -72,7 +71,7 @@ export async function fetchFirstLink(page, count = 1, group) {
     htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
   }
 
-  let relevantNodes;
+  let relevantNodes = '';
     //iterate through all tags within htmlElements
   // let relevantNode;
   // while (relevantNode === undefined) {
@@ -92,20 +91,21 @@ export async function fetchFirstLink(page, count = 1, group) {
       }
     }
 
-    // if (relevantNode === undefined) {
-    //   htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
-    // }
+    // if relevant node is still not found, then look for line items
+    if (relevantNodes === '') {
+      htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
+    }
   // }
   const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
-  const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
+  const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/",]+"/g;
 
   const mostMatches = relevantNodes.match(paranthesesRegex) || relevantNodes.match(noParanthesesRegex)
   // const mostMatches = relevantNode.innerHTML.match(paranthesesRegex) || relevantNode.innerHTML.match(noParanthesesRegex)
 
   const n = count - 1; //zero index;
   const nthMatch = mostMatches[n];
-  const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/]+)/)[1];
-  console.log('new title: ',title)
+  const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/,]+)/)[1];
+  console.log('next page: ', title)
   return {
     id: title.replaceAll('_', ' '),
     url: `https://en.wikipedia.org/wiki/${title}`,

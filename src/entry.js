@@ -27,6 +27,7 @@ const constructionGraph = {
 };
 
 const links = [];
+let copyOfLinks = [];
 
 const submitRandomArticle = async (e) => {
   e.preventDefault();
@@ -82,10 +83,6 @@ const handleSubmit = async (e, input) => {
   currentAdditions[nextPage.id] = nextPage;
   const currentLinks = [];
   while (!nodes[nextPage.id]) {
-    console.log('nodes', nodes)
-    console.log('nextPage', nextPage)
-    console.log('nextPage.id', nextPage.id)
-    console.log(nodes[nextPage.id] === "Philosophy") 
     let count = 1;
     let potentialPage = await fetchFirstLink(nextPage.id, count, group);
 
@@ -99,7 +96,7 @@ const handleSubmit = async (e, input) => {
     nextPage = potentialPage; // the unvisited potentialPage becomews the next Page
 
     //If page doesn't already exist, add it into the nodes and add corresponding list
-    //otherwise do nothing. While loop will break when the conditional below is false.
+    //Otherwise do nothing. While loop will break when the conditional below is false.
     if (!nodes[nextPage.id]) {
       currentAdditions[nextPage.id] = nextPage;
 
@@ -110,10 +107,12 @@ const handleSubmit = async (e, input) => {
       })
     }
 
-    //The d3 force methods within createDiagram mutates its inputs
-    //to protect the 
+    //The d3 force methods within createDiagram mutates its inputs, adding x, y, and other attributes.
+    //To protect the currentLinks array create a copy to construct the constructionGraph with
     const copyOfCurrentLinks = Array.from(currentLinks);
+    // console.log('WIP Link: ', copyOfCurrentLinks[copyOfCurrentLinks.length - 1].source);
     createDiagram(constructionGraph, Object.values(currentAdditions), copyOfCurrentLinks)
+    // constructionGraph = null;
   }
 
   currentLinks.push({
@@ -130,7 +129,7 @@ const handleSubmit = async (e, input) => {
       <g class='nodes construction-nodes' stroke='#fff' stroke-width='1.5'></g>
     </g>
     `;
-    sidebar.classList.add('hidden');
+  sidebar.classList.add('hidden');
 
   //transfer key value pairs from currentAdditions to nodes
   for (let pageId in currentAdditions) {
@@ -138,7 +137,12 @@ const handleSubmit = async (e, input) => {
   }
 
   links.push(...currentLinks);
-  createDiagram(mainGraph, Object.values(nodes), links);
+  copyOfLinks = Array.from(links)
+  
+  console.log('last Link: ', currentLinks[currentLinks.length - 1].source);
+
+  console.log('main links: ', links[links.length - 1]);
+  createDiagram(mainGraph, Object.values(nodes), copyOfLinks);
 
 }
 
