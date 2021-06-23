@@ -46,10 +46,11 @@ const handleSubmit = async (e, input) => {
   e.preventDefault();
   e.stopPropagation();
 
-  
+  //open up the construction sidebar
   const sidebar = document.querySelector('.sidebar');
   sidebar.classList.remove('hidden');
   
+  //Input can be passed in from the random button. If it is not, grab user input
   const inputEle = document.querySelector('.user-input')
   input ||= inputEle.value;
   group += 1;
@@ -82,15 +83,18 @@ const handleSubmit = async (e, input) => {
   const currentAdditions = {};
   currentAdditions[nextPage.id] = nextPage;
   const currentLinks = [];
+
+  //continue populating currentAdditions until a page existing in the main nodes is found
+  //at that point, break the while loop and 
   while (!nodes[nextPage.id]) {
     let count = 1;
     let potentialPage = await fetchFirstLink(nextPage.id, count, group);
 
-    // check if page has already been visited
+    // check if page has already been visited during this round of exploration
     // Output of while loop is a potentialPage that has not been visited before
     while (!!currentAdditions[potentialPage.id]) {
       count += 1;
-      potentialPage = await fetchFirstLink(potentialPage.id, count, group)
+      potentialPage = await fetchFirstLink(potentialPage.id, count, group);
     }
     prevPage = nextPage;
     nextPage = potentialPage; // the unvisited potentialPage becomews the next Page
@@ -104,7 +108,7 @@ const handleSubmit = async (e, input) => {
         source: prevPage.id,
         target: nextPage.id,
         value: 1
-      })
+      });
     }
 
     //The d3 force methods within createDiagram mutates its inputs, adding x, y, and other attributes.
@@ -119,7 +123,7 @@ const handleSubmit = async (e, input) => {
     source: prevPage.id,
     target: nextPage.id,
     value: 1
-  })
+  });
   
   // reset construction graph
   const constructionContainer = document.querySelector('#construction-container');
@@ -139,9 +143,7 @@ const handleSubmit = async (e, input) => {
   links.push(...currentLinks);
   copyOfLinks = Array.from(links)
   
-  console.log('last Link: ', currentLinks[currentLinks.length - 1].source);
 
-  console.log('main links: ', links[links.length - 1]);
   createDiagram(mainGraph, Object.values(nodes), copyOfLinks);
 
 }

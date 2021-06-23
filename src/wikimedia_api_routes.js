@@ -53,32 +53,25 @@ export async function fetchFirstLink(page, count = 1, group) {
   let html;
   try {
     html = json.parse.text["*"];
-  }
-  catch (e) {
+  } catch (e) {
     throw e;
   }
 
   //create a DOM from the html string of the Wiki page
   const parser = new DOMParser();
   const DOM = parser.parseFromString(html, "text/html");
-  
+
   //Narrow down DOM to p tags in the body
   let htmlElements = DOM.querySelectorAll(".mw-parser-output > p:not([class])");
 
-  if (htmlElements[0].outerHTML.match(/may refer to/)) {
-    // the phrase "may refer to" is used in the first p tag of disambiguation pages
-    // which predominantly use list items instead of p tags
-    htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
-  }
 
   let relevantNodes = '';
     //iterate through all tags within htmlElements
-  // let relevantNode;
-  // while (relevantNode === undefined) {
     for (let node of htmlElements) {
       let numChildNodes = 0;
       node.childNodes.forEach(child => {
-        if (child.nodeValue !== "\n") {
+      
+        if (child.textContent.match(/[\\n]+/)) {
           // only counting nodes that are more than just a newline
           numChildNodes += 1;
         }
@@ -86,8 +79,6 @@ export async function fetchFirstLink(page, count = 1, group) {
 
       if (numChildNodes > 1 && node.innerHTML.match(/<a/)) {
         relevantNodes += node.outerHTML;
-        // relevantNode = node;
-        // break
       }
     }
 
@@ -96,6 +87,7 @@ export async function fetchFirstLink(page, count = 1, group) {
       htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
     }
   // }
+
   const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/",]+"/g;
 
@@ -103,7 +95,19 @@ export async function fetchFirstLink(page, count = 1, group) {
   // const mostMatches = relevantNode.innerHTML.match(paranthesesRegex) || relevantNode.innerHTML.match(noParanthesesRegex)
 
   const n = count - 1; //zero index;
-  const nthMatch = mostMatches[n];
+
+  let nthMatch;
+  // try {
+    nthMatch = mostMatches[n];
+  // } catch (error) {
+  //   if (error instanceof TypeError) {
+  //     console.log('error', error)
+  //     return -1;
+  //   } else {
+  //     throw error;
+  //   }
+  // }
+
   const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/,]+)/)[1];
   console.log('next page: ', title)
   return {
