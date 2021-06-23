@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   errorsCloseButton.addEventListener("click", e => errorsBanner.classList.add('hidden'))
 });
 
-const resetConstructionGraph = () => {
+function resetConstructionGraph() {
   const constructionContainer = document.querySelector('#construction-container');
   constructionContainer.innerHTML = `
     <g class='viewbox construction-viewbox'>
@@ -44,13 +44,13 @@ const resetConstructionGraph = () => {
   sidebar.classList.add('hidden');
 }
 
-const closeModal = (e, modal) => {
+function closeModal(e, modal) {
   e.preventDefault();
   e.stopPropagation();
   modal.classList.add('is-close');
 }
 
-const toggleInstructions = e => {
+function toggleInstructions(e) {
   e.currentTarget.firstElementChild.classList.toggle("hidden")
 }
 
@@ -81,7 +81,7 @@ const constructionGraph = {
 };
 
 
-const submitRandomArticle = async (e) => {
+async function submitRandomArticle(e) {
   e.preventDefault();
   e.stopPropagation();
 
@@ -93,7 +93,7 @@ const submitRandomArticle = async (e) => {
   handleSubmit(e, randomArticleTitle);
 } 
 
-const handleSubmit = async (e, input) => {
+async function handleSubmit(e, input) {
   // grab a page
   e.preventDefault();
   e.stopPropagation();
@@ -105,12 +105,7 @@ const handleSubmit = async (e, input) => {
   const errorsText = document.querySelector('.errors-text');
   errorsText.innerHTML = '';
 
-
-
-
   //open up the construction sidebar
-  const sidebar = document.querySelector('.sidebar');
-  sidebar.classList.remove('hidden');
   
   //Input can be passed in from the random button. If it is not, grab user input
   const inputEle = document.querySelector('.user-input')
@@ -154,10 +149,11 @@ const handleSubmit = async (e, input) => {
     return
   }
 
-
+  // open sidebar
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.remove('hidden');
+  
   let prevPage;
-
-  // keep grabbing the next page until an existing node is reached
   const currentAdditions = {};
   currentAdditions[nextPage.id] = nextPage;
   const currentLinks = [];
