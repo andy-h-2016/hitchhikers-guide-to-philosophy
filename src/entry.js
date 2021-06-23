@@ -2,7 +2,61 @@ import {fetchFirstLink, fetchRandomArticleTitle, fetchArticleTitle} from './wiki
 import {createDiagram} from './diagram/force_diagram';
 //input into d3 renderer as Object.values(nodes)
 
+document.addEventListener("DOMContentLoaded", () => {
+  createDiagram(mainGraph, Object.values(nodes))
+  const form = document.querySelector(".article-form");
+  form.addEventListener("submit", handleSubmit);
+
+  const submitButton = document.querySelector(".user-submit");
+  submitButton.addEventListener("click", handleSubmit)
+  
+  const randomButton = document.querySelector('.random-submit');
+  randomButton.addEventListener("click", submitRandomArticle);
+
+  const modal = document.querySelector('.modal-screen');
+  modal.addEventListener("click", e => closeModal(e, modal));
+  
+  const closeButton = document.querySelector('.close-modal');
+  closeButton.addEventListener("click", e => closeModal(e, modal))
+
+  const modalForm = document.querySelector('.modal-form');
+  modalForm.addEventListener("click", e => e.stopPropagation());
+
+  const instructionsIcon = document.querySelector('.instructions-icon');
+  instructionsIcon.addEventListener("mouseenter", toggleInstructions);
+  instructionsIcon.addEventListener("mouseleave", toggleInstructions);
+
+  const errorsBanner = document.querySelector('.errors-container');
+  const errorsCloseButton = document.querySelector('.close-button');
+  errorsCloseButton.addEventListener("click", e => errorsBanner.classList.add('hidden'))
+});
+
+const resetConstructionGraph = () => {
+  const constructionContainer = document.querySelector('#construction-container');
+  constructionContainer.innerHTML = `
+    <g class='viewbox construction-viewbox'>
+      <g class='links construction-links' stroke='#999' stroke-opacity='0.6'></g>
+      <g class='nodes construction-nodes' stroke='#fff' stroke-width='1.5'></g>
+    </g>
+  `;
+
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.add('hidden');
+}
+
+const closeModal = (e, modal) => {
+  e.preventDefault();
+  e.stopPropagation();
+  modal.classList.add('is-close');
+}
+
+const toggleInstructions = e => {
+  e.currentTarget.firstElementChild.classList.toggle("hidden")
+}
+
+
 let group = 0;
+const links = [];
 const nodes = {
   Philosophy: {
     id: "Philosophy", 
@@ -26,8 +80,6 @@ const constructionGraph = {
   nodes: ".construction-nodes"
 };
 
-const links = [];
-let copyOfLinks = [];
 
 const submitRandomArticle = async (e) => {
   e.preventDefault();
@@ -47,9 +99,11 @@ const handleSubmit = async (e, input) => {
   e.stopPropagation();
 
   //reset error banner
-  const errorsBanner = document.querySelector('.errors');
-  errorsBanner.innerHTML = '';
+  const errorsBanner = document.querySelector('.errors-container');
   errorsBanner.classList.add('hidden');
+
+  const errorsText = document.querySelector('.errors-text');
+  errorsText.innerHTML = '';
 
 
 
@@ -69,6 +123,7 @@ const handleSubmit = async (e, input) => {
   const urlMatch = input.match(wikiRegex);
 
   let nextPage;
+  let title;
   if (urlMatch) {
     nextPage = {
       id: urlMatch[1],
@@ -76,15 +131,29 @@ const handleSubmit = async (e, input) => {
       group: group,
       level: 1
     };
-  } else {
-    const title = await fetchArticleTitle(input);
+  } else if (title = await fetchArticleTitle(input)) {
     nextPage = {
       id: title,
-      url:  `https://en.wikipedia.org/wiki/${input.replaceAll(' ', '_')}`,
+      url:  `https://en.wikipedia.org/wiki/${title.replaceAll(' ', '_')}`,
       group: group,
       level: 1
     };
+  } else {
+    // if title is null, page could not be found. Display error to user and terminate function.
+    resetConstructionGraph();
+    const url = `https://en.wikipedia.org/wiki/${input.replaceAll(' ', '_')}`;
+
+    errorsText.innerHTML = `
+      Invalid page: The page <a href="https://en.wikipedia.org/wiki/${input.replaceAll(' ', '_')}" target="_blank" rel="noopener noreferrer">${input}</a>
+      could not be found.
+      <br/> 
+      If you believe this is a valid page, please log an issue 
+      <a href="https://github.com/andy-h-2016/hitchhikers-guide-to-philosophy/issues" target="_blank" rel="noopener noreferrer">here</a>.`;
+
+    errorsBanner.classList.remove('hidden');
+    return
   }
+
 
   let prevPage;
 
@@ -110,7 +179,7 @@ const handleSubmit = async (e, input) => {
     // if next page cannot be found, close the sidebar, display an error message, and terminate the function
     if (potentialPage.error === 422) {
       resetConstructionGraph();
-      errorsBanner.innerHTML = `
+      errorsText.innerHTML = `
         Invalid page: The next page could not be found from 
         <a href="${prevPage.url}" target="_blank" rel="noopener noreferrer">${prevPage.id}</a>.
         <br/> 
@@ -144,7 +213,7 @@ const handleSubmit = async (e, input) => {
   // this conditional will trip if the user's input skips the above while loop.
   // Display error message to user and terminate function.
   if (prevPage === undefined) {
-    errorsBanner.innerHTML = `${nextPage.id} has already been mapped.`;
+    errorsText.innerHTML += `${nextPage.id} has already been mapped.`;
 
     errorsBanner.classList.remove('hidden');
     resetConstructionGraph();
@@ -166,60 +235,12 @@ const handleSubmit = async (e, input) => {
   }
 
   links.push(...currentLinks);
-  copyOfLinks = Array.from(links)
+  const copyOfLinks = Array.from(links)
   
 
   createDiagram(mainGraph, Object.values(nodes), copyOfLinks);
 
 }
 
-const resetConstructionGraph = () => {
-  const constructionContainer = document.querySelector('#construction-container');
-  constructionContainer.innerHTML = `
-    <g class='viewbox construction-viewbox'>
-      <g class='links construction-links' stroke='#999' stroke-opacity='0.6'></g>
-      <g class='nodes construction-nodes' stroke='#fff' stroke-width='1.5'></g>
-    </g>
-  `;
 
-  const sidebar = document.querySelector('.sidebar');
-  sidebar.classList.add('hidden');
-}
-
-const closeModal = (e, modal) => {
-  e.preventDefault();
-  e.stopPropagation();
-  modal.classList.add('is-close');
-}
-
-const toggleInstructions = e => {
-  e.currentTarget.firstElementChild.classList.toggle("hidden")
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  createDiagram(mainGraph, Object.values(nodes))
-  const form = document.querySelector(".article-form");
-  
-  form.addEventListener("submit", handleSubmit);
-
-  const submitButton = document.querySelector(".user-submit");
-  submitButton.addEventListener("click", handleSubmit)
-  
-  const randomButton = document.querySelector('.random-submit');
-  randomButton.addEventListener("click", submitRandomArticle);
-
-  const modal = document.querySelector('.modal-screen');
-  modal.addEventListener("click", e => closeModal(e, modal));
-  
-  const closeButton = document.querySelector('.close-modal');
-  closeButton.addEventListener("click", e => closeModal(e, modal))
-
-  const modalForm = document.querySelector('.modal-form');
-  modalForm.addEventListener("click", e => e.stopPropagation());
-
-  const instructionsIcon = document.querySelector('.instructions-icon');
-  instructionsIcon.addEventListener("mouseenter", toggleInstructions);
-  instructionsIcon.addEventListener("mouseleave", toggleInstructions);
-
-});
 

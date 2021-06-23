@@ -26,7 +26,6 @@ export async function fetchArticleTitle(page) {
     new URLSearchParams({
         origin: "*",
         action: "parse",
-        prop: "displaytitle",
         page: page,
         format: "json",
         redirects: 1
@@ -34,15 +33,14 @@ export async function fetchArticleTitle(page) {
 
   const req = await fetch(url);
   const json = await req.json();
-    console.log('json', json)
 
-  return json.parse.displaytitle
+  const title = (json.parse) ? json.parse.title : null;
+  return title;
 }
 
 
 
 export async function fetchFirstLink(page, count = 1, group) {
-  console.log('input: ', page)
   page = page.replaceAll(' ', '_');
   const url = "https://en.wikipedia.org/w/api.php?" +
     new URLSearchParams({
@@ -77,7 +75,10 @@ export async function fetchFirstLink(page, count = 1, group) {
 
 
   let relevantNodes = '';
+  let iterationCount = 0;
     //iterate through all tags within htmlElements
+
+  while (relevantNodes.length === 0 || iterationCount < 3) {
     for (let node of htmlElements) {
       let numChildNodes = 0;
       node.childNodes.forEach(child => {
@@ -94,15 +95,16 @@ export async function fetchFirstLink(page, count = 1, group) {
     }
 
     // if relevant node is still not found, then look for line items
-    if (relevantNodes === '') {
+    if (iterationCount === 0) {
       htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
+    } else if (iterationCount === 1) {
+      htmlElements = DOM.querySelectorAll(".mw-parser-output")
     }
-  // }
-  console.log('htmlElements: ', htmlElements)
-  console.log('relevantNodes: ', relevantNodes)
-  // const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
-  const paranthesesRegex = /(?<!(?:\([\w\s]*)|\(.*from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
-  const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/",]+"/g;
+    iterationCount += 1;
+  }
+
+  const paranthesesRegex = /(?<!(?:\([\w\s]*)|\(.*from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia|Template)[\w_\(\):\-\.\/"]+"/g;
+  const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia|Template)[\w_\(\):\-\.\/",]+"/g;
 
   const mostMatches = relevantNodes.match(paranthesesRegex) || relevantNodes.match(noParanthesesRegex)
   // const mostMatches = relevantNode.innerHTML.match(paranthesesRegex) || relevantNode.innerHTML.match(noParanthesesRegex)

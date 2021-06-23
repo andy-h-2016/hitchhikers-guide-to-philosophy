@@ -1,18 +1,33 @@
-.errors {
+.errors-container {
   color: rgb(0, 0, 0);
   background-color: rgb(173, 0, 0);
   background-color: rgb(214, 182, 0);
   width: fit-content;
-  padding: 5px 10px;
-  margin: 10px auto;
+  padding: 8px 14px;
+  margin: 14px auto;
   border-radius: 4px;
 
   font-size: 20px;
   text-align: center;
   line-height: 30px;
+
+  position: relative;
 }
 
-.errors a {
+.errors-container a {
   text-decoration: underline;
   color: rgb(0, 95, 248);
+}
+
+.close-button {
+  font-size: 10px;
+  color: rgb(100, 100, 100, 0.8);
+
+  position: absolute;
+  top: 3px;
+  right: 4px;
+}
+
+.close-button:hover {
+  cursor: pointer;
 }
