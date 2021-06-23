@@ -123,7 +123,7 @@ export async function fetchFirstLink(page, count = 1, group) {
   }
 
   const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/,]+)/)[1];
-  console.log('next page: ', title)
+
   return {
     id: title.replaceAll('_', ' '),
     url: `https://en.wikipedia.org/wiki/${title}`,
