@@ -19,17 +19,24 @@ export async function fetchRandomArticleTitle() {
   return json.query.random[0].title
 }
 
-export async function fetchArticleTitle() {
+export async function fetchArticleTitle(page) {
+  page = page.replaceAll(' ', '_');
+
   const url = "https://en.wikipedia.org/w/api.php?" +
     new URLSearchParams({
         origin: "*",
-        action: "query",
+        action: "parse",
+        prop: "displaytitle",
+        page: page,
         format: "json",
+        redirects: 1
     });
 
   const req = await fetch(url);
   const json = await req.json();
-  return json.query.random[0].title
+    console.log('json', json)
+
+  return json.parse.displaytitle
 }
 
 
@@ -91,8 +98,10 @@ export async function fetchFirstLink(page, count = 1, group) {
       htmlElements = DOM.querySelectorAll(".mw-parser-output > ul > li");
     }
   // }
-
-  const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
+  console.log('htmlElements: ', htmlElements)
+  console.log('relevantNodes: ', relevantNodes)
+  // const paranthesesRegex = /(?<!(?:\([\w\s]*)|from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
+  const paranthesesRegex = /(?<!(?:\([\w\s]*)|\(.*from[\w\s]*|<small>\s?|<i>\s?)<a[\w\s]*href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/"]+"/g;
   const noParanthesesRegex = /<a(?:[\w\s]+)?href="\/wiki\/(?!Help|File|Category|Wikipedia)[\w_\(\):\-\.\/",]+"/g;
 
   const mostMatches = relevantNodes.match(paranthesesRegex) || relevantNodes.match(noParanthesesRegex)

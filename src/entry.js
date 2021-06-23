@@ -1,4 +1,4 @@
-import {fetchFirstLink, fetchRandomArticleTitle} from './wikimedia_api_routes';
+import {fetchFirstLink, fetchRandomArticleTitle, fetchArticleTitle} from './wikimedia_api_routes';
 import {createDiagram} from './diagram/force_diagram';
 //input into d3 renderer as Object.values(nodes)
 
@@ -49,7 +49,9 @@ const handleSubmit = async (e, input) => {
   //reset error banner
   const errorsBanner = document.querySelector('.errors');
   errorsBanner.innerHTML = '';
-  errorsBanner.classList.add('hidden')
+  errorsBanner.classList.add('hidden');
+
+
 
 
   //open up the construction sidebar
@@ -75,8 +77,9 @@ const handleSubmit = async (e, input) => {
       level: 1
     };
   } else {
+    const title = await fetchArticleTitle(input);
     nextPage = {
-      id: input,
+      id: title,
       url:  `https://en.wikipedia.org/wiki/${input.replaceAll(' ', '_')}`,
       group: group,
       level: 1
@@ -136,6 +139,16 @@ const handleSubmit = async (e, input) => {
     //To protect the currentLinks array create a copy to construct the constructionGraph with
     const copyOfCurrentLinks = Array.from(currentLinks);
     createDiagram(constructionGraph, Object.values(currentAdditions), copyOfCurrentLinks)
+  }
+
+  // this conditional will trip if the user's input skips the above while loop.
+  // Display error message to user and terminate function.
+  if (prevPage === undefined) {
+    errorsBanner.innerHTML = `${nextPage.id} has already been mapped.`;
+
+    errorsBanner.classList.remove('hidden');
+    resetConstructionGraph();
+    return;
   }
 
   currentLinks.push({
