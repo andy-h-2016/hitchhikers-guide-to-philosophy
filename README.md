@@ -1,18 +1,20 @@
 # The Hitchhiker's Guide To Philosophy
 
 ## Background
-An unplanned feature of Wikipedia is how many of its articles can lead back to the <a href="https://en.wikipedia.org/wiki/Philosophy">Philosophy</a> page. This phenomenon has spawned a game for people to race to get to the Philosophy page from a random Wikipedia article. It has even become notable enough to have its own <a href="https://en.wikipedia.org/wiki/Wikipedia:Getting_to_Philosophy">article</a> on Wikipedia. The Wiki Road to Philosohy visualizes the trail of articles that are traversed to get from any given article to the Philosophy page. The strategy employed is to traverse through the article with the shortest title (excluding acronyms since they stand for longer titles) with the assumption that articles with shorter titles are more likely to be abstract and therefore closer to the topic of philosophy.
+An unplanned feature of Wikipedia is how many of its articles can lead back to the <a href="https://en.wikipedia.org/wiki/Philosophy">Philosophy</a> page. This phenomenon has spawned a game for people to race to get to the Philosophy page from a random Wikipedia article. It has even become notable enough to have its own <a href="https://en.wikipedia.org/wiki/Wikipedia:Getting_to_Philosophy">article</a> on Wikipedia. _**<a href="https://andy-h-2016.github.io/hitchhikers-guide-to-philosophy/">The Hitchhiker's Guide to Philosophy</a>**_ visualizes the trail of articles that are traversed to get from any given article to the Philosophy page. The strategy employed is to traverse through the first link on each article, excluding links to pronounciation, etymology, and other Wikipedia boilerplate links.
 
 ## Functionality & MVP
 Users will be able to:
 * Enter an article title and see the list of articles that lead to the Philosphy article. This list will be represented as a chain of nodes.
-* Select a node to see details about the corresponding article. These details will include the distance away from the Philosophy article, as well as suggestions for other articles from which to start a new chain of nodes leading to Philosophy.
-    * Chains that use the same articles will show as converging.
+   * Users will see new chains being constructed in real time, before they are added to the main chain.
+   * Chains that use the same articles will show as converging.
+   * Nodes will have links to the Wikipedia article it represents
+* Adjust the visualization of the nodes. Available options will include zooming, panning, and moving the nodes.
 
-In addition, there will be a splash page introducing the app and how to use it. 
+In addition, there will be a modal introducing the app and how to use it. 
 
 ## Wireframe
-The app will consist of a screen showing all of the nodes. As nodes are added to the screen, the zoom level will auto-scale to fit all of the nodes on the screen. Zoom controls will be available. Primary control scheme will be the mouse clicking and dragging to select nodes and move the view window around.
+The app will consist of a screen showing all of the nodes. Zoom controls will be available. Primary control scheme will be the mouse clicking and dragging to select nodes and move the view window around.
 <img src="./assets/images/wireframe.png"/>
 
 
@@ -35,7 +37,7 @@ The Wiki Road to Philosophy will be accomplished with the following technologies
     * Add functionality for chains with common nodes to converge.
     * Add functionality for controlling the viewport's zoom and location relative to the nodes.
 * Day 4:
-    * Create splash page with introduction and instructions.
+    * Create modal with introduction and instructions.
     * Polish styling.
 
 ## Bonus Features
