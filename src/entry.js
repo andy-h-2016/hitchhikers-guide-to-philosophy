@@ -46,6 +46,12 @@ const handleSubmit = async (e, input) => {
   e.preventDefault();
   e.stopPropagation();
 
+  //reset error banner
+  const errorsBanner = document.querySelector('.errors');
+  errorsBanner.innerHTML = '';
+  errorsBanner.classList.add('hidden')
+
+
   //open up the construction sidebar
   const sidebar = document.querySelector('.sidebar');
   sidebar.classList.remove('hidden');
@@ -87,6 +93,7 @@ const handleSubmit = async (e, input) => {
   //continue populating currentAdditions until a page existing in the main nodes is found
   //at that point, break the while loop and 
   while (!nodes[nextPage.id]) {
+    prevPage = nextPage;
     let count = 1;
     let potentialPage = await fetchFirstLink(nextPage.id, count, group);
 
@@ -96,7 +103,21 @@ const handleSubmit = async (e, input) => {
       count += 1;
       potentialPage = await fetchFirstLink(potentialPage.id, count, group);
     }
-    prevPage = nextPage;
+
+    // if next page cannot be found, close the sidebar, display an error message, and terminate the function
+    if (potentialPage.error === 422) {
+      resetConstructionGraph();
+      errorsBanner.innerHTML = `
+        Invalid page: The next page could not be found from 
+        <a href="${prevPage.url}" target="_blank" rel="noopener noreferrer">${prevPage.id}</a>.
+        <br/> 
+        If you believe this is a valid page, please log an issue 
+        <a href="https://github.com/andy-h-2016/hitchhikers-guide-to-philosophy/issues" target="_blank" rel="noopener noreferrer">here</a>.`;
+
+      errorsBanner.classList.remove('hidden');
+
+      return;
+    }
     nextPage = potentialPage; // the unvisited potentialPage becomews the next Page
 
     //If page doesn't already exist, add it into the nodes and add corresponding list
@@ -114,9 +135,7 @@ const handleSubmit = async (e, input) => {
     //The d3 force methods within createDiagram mutates its inputs, adding x, y, and other attributes.
     //To protect the currentLinks array create a copy to construct the constructionGraph with
     const copyOfCurrentLinks = Array.from(currentLinks);
-    // console.log('WIP Link: ', copyOfCurrentLinks[copyOfCurrentLinks.length - 1].source);
     createDiagram(constructionGraph, Object.values(currentAdditions), copyOfCurrentLinks)
-    // constructionGraph = null;
   }
 
   currentLinks.push({
@@ -126,14 +145,7 @@ const handleSubmit = async (e, input) => {
   });
   
   // reset construction graph
-  const constructionContainer = document.querySelector('#construction-container');
-  constructionContainer.innerHTML = `
-    <g class='viewbox construction-viewbox'>
-      <g class='links construction-links' stroke='#999' stroke-opacity='0.6'></g>
-      <g class='nodes construction-nodes' stroke='#fff' stroke-width='1.5'></g>
-    </g>
-    `;
-  sidebar.classList.add('hidden');
+  resetConstructionGraph();
 
   //transfer key value pairs from currentAdditions to nodes
   for (let pageId in currentAdditions) {
@@ -146,6 +158,19 @@ const handleSubmit = async (e, input) => {
 
   createDiagram(mainGraph, Object.values(nodes), copyOfLinks);
 
+}
+
+const resetConstructionGraph = () => {
+  const constructionContainer = document.querySelector('#construction-container');
+  constructionContainer.innerHTML = `
+    <g class='viewbox construction-viewbox'>
+      <g class='links construction-links' stroke='#999' stroke-opacity='0.6'></g>
+      <g class='nodes construction-nodes' stroke='#fff' stroke-width='1.5'></g>
+    </g>
+  `;
+
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.add('hidden');
 }
 
 const closeModal = (e, modal) => {

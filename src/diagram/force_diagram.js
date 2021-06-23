@@ -86,7 +86,7 @@ export function createDiagram(cssSelectors, nodes, links = []) {
 
   const label = nodeGroup.append("foreignObject")
     .attr('class', 'label-container')
-    .html(d => `<a href=${d.url}>${d.id}</a>`)
+    .html(d => `<a href=${d.url} target="_blank" rel="noopener noreferrer">${d.id}</a>`)
     .attr('x', RADIUS + 2)
     .attr('y', -(RADIUS * 1.3))
     .attr('stroke', 'white')

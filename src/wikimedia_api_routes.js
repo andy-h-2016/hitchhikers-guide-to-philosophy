@@ -54,7 +54,11 @@ export async function fetchFirstLink(page, count = 1, group) {
   try {
     html = json.parse.text["*"];
   } catch (e) {
-    throw e;
+     if (e instanceof TypeError) {
+      return {error: 422};
+    } else {
+      throw e;
+    }
   }
 
   //create a DOM from the html string of the Wiki page
@@ -97,16 +101,15 @@ export async function fetchFirstLink(page, count = 1, group) {
   const n = count - 1; //zero index;
 
   let nthMatch;
-  // try {
+  try {
     nthMatch = mostMatches[n];
-  // } catch (error) {
-  //   if (error instanceof TypeError) {
-  //     console.log('error', error)
-  //     return -1;
-  //   } else {
-  //     throw error;
-  //   }
-  // }
+  } catch (e) {
+    if (e instanceof TypeError) {
+      return {error: 422};
+    } else {
+      throw e;
+    }
+  }
 
   const title = nthMatch.match(/wiki\/([\w_\(\)\:\-\.\/,]+)/)[1];
   console.log('next page: ', title)

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="./assets/stylesheets/header.css">
     <link rel="stylesheet" href="./assets/stylesheets/modal.css">
     <link rel="stylesheet" href="./assets/stylesheets/icons.css">
+    <link rel="stylesheet" href="./assets/stylesheets/errors.css">
 
     <title>The Philosopher's Guide to Wikipedia</title>
   </head>
@@ -47,11 +48,13 @@
       <div class="title">The Philosopher's Guide to Wikipedia</div>
       <!-- <h2 class="tagline">How far away is your Wikipedia article from the Philosophy page?</h2> -->
       <form class="article-form">
-        <input class="user-input" type="text" name="title" placeholder="article title or url">
+        <input class="user-input" type="text" name="title" autocomplete="off" placeholder="article title or url">
         <i class="fas fa-search user-submit" title="submit"></i>
         <i class="fas fa-dice-three random-submit" title="random article"></i>       
       </form>
     </div>
+
+    <div class="errors hidden"></div>
 
     <div class="modal-screen">
       <div class="modal-form">
