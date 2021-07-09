@@ -27,6 +27,25 @@
   color: white;
 }
 
+@media screen and (max-width: 1120px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .title {
+    margin-left: 0;
+  }
+
+  .article-form {
+    display: block;
+    position: static;
+    transform: translate(0);
+    left: unset;
+    margin-top: 10px;
+    transform: translate(26px)
+  }
+}
+
 .article-form i {
   margin-left: 5px;
   cursor: pointer;
