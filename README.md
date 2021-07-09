@@ -20,10 +20,10 @@ The app will consist of a screen showing all of the nodes. Zoom controls will be
 
 ## Architecture & Technologies
 The Wiki Road to Philosophy will be accomplished with the following technologies:
-* `HTML/CSS` for rendering of the nodes.
-* `Javascript` to handle user interaction via event listeners.
+* `D3.js` for rendering of the nodes.
+* `JavaScript` to handle user interaction via event listeners.
 * `MediaWiki Action API` to access data on the links each Wikipedia article has.
-* `Node Fetch` module to handle the AJAX requests to and responses from the `MediaWiki Action API`.
+* `Fetch API` will handle the AJAX requests to and responses from the `MediaWiki Action API`.
 
 ## Implementation Timeline
 * Day 1: 
