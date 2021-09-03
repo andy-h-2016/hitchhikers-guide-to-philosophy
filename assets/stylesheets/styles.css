@@ -27,7 +27,7 @@ body {
   height: 100vh;
   background-color: white;
   z-index: -1;
-  background-image: url("../images/wormhole-grid.jpg");
+  background-image: url("../images/wormhole-grid.webp");
   background-position: right;
   background-size: cover;
   background-repeat: no-repeat;
