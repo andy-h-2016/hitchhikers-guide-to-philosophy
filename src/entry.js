@@ -81,16 +81,27 @@ const constructionGraph = {
 };
 
 
-async function submitRandomArticle(e) {
+// async function submitRandomArticle(e) {
+function submitRandomArticle(e) {
   e.preventDefault();
   e.stopPropagation();
 
-  const randomArticleTitle = await fetchRandomArticleTitle();
+  // const randomArticleTitle = await fetchRandomArticleTitle();
+  let randomArticleTitle; 
+  new Promise((resolve, reject) => {
+    if (randomArticleTitle = fetchRandomArticleTitle()) {
+      // console.log(randomArticleTitle)
+      //resolve is a built-in (?) JS method that is automatically passed in upon creation of a Promise object. It sets the Promise state to resolved and the PromiseValue to the input of the resolve function
+      resolve(randomArticleTitle) 
+    }
+  }).then(articleTitle => {
+    console.log(articleTitle)
+    const userInput = document.querySelector('.user-input');
+    userInput.value = articleTitle;
 
-  const userInput = document.querySelector('.user-input');
-  userInput.value = randomArticleTitle;
+    handleSubmit(e, articleTitle);
+  })
 
-  handleSubmit(e, randomArticleTitle);
 } 
 
 async function handleSubmit(e, input) {
