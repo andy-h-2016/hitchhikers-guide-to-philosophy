@@ -5,7 +5,7 @@ body {
 
 
 #main-container {
-  background-image: url("../images/space-universe-stars.jpeg");
+  background-image: url("../images/space-universe-stars-75.webp");
   background-size: cover;
   background-repeat: no-repeat;
   position: absolute;
@@ -27,7 +27,7 @@ body {
   height: 100vh;
   background-color: white;
   z-index: -1;
-  background-image: url("../images/wormhole-grid.jpg");
+  background-image: url("../images/wormhole-grid.webp");
   background-position: right;
   background-size: cover;
   background-repeat: no-repeat;
