@@ -45,3 +45,5 @@ yarn.lock
 
 # Ignore IDE
 .idea
+
+node_modules/.cache
