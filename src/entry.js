@@ -1,6 +1,7 @@
 import {fetchFirstLink, fetchRandomArticleTitle, fetchArticleTitle} from './wikimedia_api_routes';
 import {createDiagram} from './diagram/force_diagram';
 //input into d3 renderer as Object.values(nodes)
+import instructionsIcon from './ui_features/instructions_icon'
 
 document.addEventListener("DOMContentLoaded", () => {
   createDiagram(mainGraph, Object.values(nodes))
@@ -22,9 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalForm = document.querySelector('.modal-form');
   modalForm.addEventListener("click", e => e.stopPropagation());
 
-  const instructionsIcon = document.querySelector('.instructions-icon');
-  instructionsIcon.addEventListener("mouseenter", toggleInstructions);
-  instructionsIcon.addEventListener("mouseleave", toggleInstructions);
+  instructionsIcon;
 
   const errorsBanner = document.querySelector('.errors-container');
   const errorsCloseButton = document.querySelector('.close-button');
@@ -48,10 +47,6 @@ function closeModal(e, modal) {
   e.preventDefault();
   e.stopPropagation();
   modal.classList.add('is-close');
-}
-
-function toggleInstructions(e) {
-  e.currentTarget.firstElementChild.classList.toggle("hidden")
 }
 
 
